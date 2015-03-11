@@ -1,4 +1,4 @@
-# MATHEMATICA AS PROGRAMMING LANGUAGE AND SOFTWARE - Mathematica code, projets and exercises.
+# MATHEMATICA AS PROGRAMMING LANGUAGE AND SOFTWARE - Mathematica code, projects and exercises.
 
 These files are a collection of Mathematica 9.0 notebooks: 
 
@@ -17,11 +17,11 @@ randomwalk_problem17.nb -> This notebook creates and plots a random walk in one 
 - WSSS Project: 
 “What popularity tells us about a Wikipedia sub-graph?”
 
-These files are the Mathematica notebooks and descriptions of the personal project that I developed during the Wolfram Science Summer School on July 2013. Studying the popularity time series of Wikipedia articles I observed two global behaviors. In this contest “popularity” is the number of daily/weekly visits of a page on the Internet. I observed also that, at the time scale that we were considering, the popularity diffuse instantly in the graph, following the links. I described the characteristics of a Wikipedia sub-graph that I considered for the analysis, given an initial page. I tried to predict the real connections of the graph from popularity, according to my hypothesis. 
+These files are the Mathematica notebooks and descriptions of the personal project that I developed during the Wolfram Science Summer School on July 2013. Studying the popularity time series of Wikipedia articles I observed two global behaviors. In this context “popularity” is the number of daily/weekly visits of a page on the Internet. I observed also that, at the considered time scale, the popularity diffuses instantly in the graph, following the links. I described all characteristics of the Wikipedia sub-graph that I build for the analysis, given an initial page. I tried to predict the real connections of the graph from popularity, according to my hypothesis. 
 
-DESCRIPTION: posterValentina.pdf -> It describes briefly the project in every aspect. It provides also a short description of the results.
+DESCRIPTION: posterValentina.pdf -> It describes briefly the project in every aspect. It provides also a short description of the results, with graphics.
 
 WIKIPEDIA NETWORK: createNetwork.nb -> It builds the Wikipedia sub-graph starting from an initial page, considering all the articles within two-cliks distance inside English Wikipedia. It also considers links multiplicity.
 
-PROJECT: projectComplete -> All the functions, code lines, graphics, data manipulations for the developing of the project in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
+PROJECT: projectComplete -> All the functions, code lines, graphics, data manipulations for developing the project, in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
 
