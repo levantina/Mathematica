@@ -25,6 +25,8 @@ DESCRIPTION: posterValentina.pdf -> It describes briefly the project in every as
 
 WIKIPEDIA NETWORK: createNetwork.nb -> It builds the Wikipedia sub-graph starting from an initial page, considering all the articles within two-cliks distance inside English Wikipedia. It also considers links multiplicity.
 
+createNetwork.pdf -> A pdf version of the previous notebook, for a visualization without Mathematica.
+
 PROJECT: projectComplete.nb -> All the functions, code lines, graphics, data manipulations for developing the project, in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
 
 AllProjectComplete.pdf -> A pdf version of the previous notebook, for a visualization without Mathematica.
