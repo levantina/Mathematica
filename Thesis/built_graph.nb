@@ -1,0 +1,836 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     29121,        827]
+NotebookOptionsPosition[     26567,        736]
+NotebookOutlinePosition[     26928,        752]
+CellTagsIndexPosition[     26885,        749]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Built the Wikipedia Sub-Graph", "Section",
+ CellChangeTimes->{{3.588575018493911*^9, 3.5885750213714*^9}, {
+  3.588575051643639*^9, 3.5885750621586027`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Criteria", "Subsection",
+ CellChangeTimes->{{3.588575075914629*^9, 3.588575077314724*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+First Criterion: Multiplicity >1\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.588576588797406*^9, 3.588576624011574*^9}}],
+
+Cell["\<\
+Da tutti gli hyperlink di una pagina di en.wikipedia elimino:
+Main_Page
+ripetizioni < 2
+links esterni
+links non di en.wikipedia
+
+Except[\[OpenCurlyDoubleQuote]:\[CloseCurlyDoubleQuote]] elimina file del tipo:
+http://en.wikipedia.org/wiki/Portal:<titolo>
+.../File:<immagine>
+.../Wikipedia:Contact_Us\
+\>", "Text",
+ CellChangeTimes->{{3.588575126718885*^9, 3.588575235041264*^9}, {
+  3.588575304055098*^9, 3.588575355385371*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"cleanlinks", "[", "links_", "]"}], " ", ":=", " ", 
+  RowBox[{"Module", "[", "\n", "\t", 
+   RowBox[{
+    RowBox[{"{", "cleanedlinks", "}"}], ",", "\n", "\t", 
+    RowBox[{
+     RowBox[{"cleanedlinks", " ", "=", " ", 
+      RowBox[{"Select", "[", "\n", "\t\t", 
+       RowBox[{"links", ",", "\n", "\t\t", 
+        RowBox[{
+         RowBox[{"StringMatchQ", "[", 
+          RowBox[{"#", ",", " ", 
+           RowBox[{"\"\<http://en.wikipedia.org/wiki/\>\"", "~~", 
+            RowBox[{
+             RowBox[{"Except", "[", "\"\<:\>\"", "]"}], ".."}]}]}], "]"}], 
+         " ", "&"}]}], "\n", "\t", "]"}]}], ";", "\n", "\t", 
+     RowBox[{"cleanedlinks", " ", "=", " ", 
+      RowBox[{"Select", "[", " ", 
+       RowBox[{
+        RowBox[{"Gather", "[", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{
+          "cleanedlinks", ",", 
+           "\"\<http://en.wikipedia.org/wiki/Main_Page\>\""}], "]"}], "]"}], 
+        ",", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "#", "]"}], " ", ">", " ", "1"}], " ", 
+         "&"}]}], "]"}]}], ";", "\n", "\t", 
+     RowBox[{"Tally", "@", 
+      RowBox[{"Flatten", "[", "cleanedlinks", "]"}]}]}]}], "\n", 
+   "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "this", " ", "function", " ", "will", " ", "consider", " ", "links", " ", 
+    "multiplicity", " ", "and", " ", "links", " ", "with", " ", "at", " ", 
+    "least", " ", "2", " ", "repetitions"}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582499717022997*^9, 3.582499873086062*^9}, {
+  3.582499913772024*^9, 3.582499915876026*^9}, {3.582499967150619*^9, 
+  3.5824999716333427`*^9}, {3.5825026435040894`*^9, 3.582502650904758*^9}, {
+  3.582502863258078*^9, 3.58250288959753*^9}, {3.5825629148044*^9, 
+  3.5825629334146643`*^9}, {3.582563260077615*^9, 3.582563285784018*^9}, {
+  3.5886802311765537`*^9, 3.588680232871051*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Second Criterion : Multiplicity > 0\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5885766310897017`*^9, 3.588576646649688*^9}}],
+
+Cell["Importo anche links singoli", "Text",
+ CellChangeTimes->{{3.5885761347106657`*^9, 3.588576151390679*^9}, {
+  3.588578392211879*^9, 3.588578406266396*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"cleanlinks2", "[", "links_", "]"}], " ", ":=", " ", 
+  RowBox[{"Module", "[", "\n", "\t", 
+   RowBox[{
+    RowBox[{"{", "cleanedlinks", "}"}], ",", "\n", "\t", 
+    RowBox[{
+     RowBox[{"cleanedlinks", " ", "=", " ", 
+      RowBox[{"Select", "[", "\n", "\t\t", 
+       RowBox[{"links", ",", "\n", "\t\t", 
+        RowBox[{
+         RowBox[{"StringMatchQ", "[", 
+          RowBox[{"#", ",", " ", 
+           RowBox[{"\"\<http://en.wikipedia.org/wiki/\>\"", "~~", 
+            RowBox[{
+             RowBox[{"Except", "[", "\"\<:\>\"", "]"}], ".."}]}]}], "]"}], 
+         " ", "&"}]}], "\n", "\t", "]"}]}], ";", "\n", "\t", 
+     RowBox[{"cleanedlinks", " ", "=", " ", 
+      RowBox[{"Select", "[", " ", 
+       RowBox[{
+        RowBox[{"Gather", "[", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{
+          "cleanedlinks", ",", 
+           "\"\<http://en.wikipedia.org/wiki/Main_Page\>\""}], "]"}], "]"}], 
+        ",", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "#", "]"}], " ", ">", " ", "0"}], " ", 
+         "&"}]}], "]"}]}], ";", "\n", "\t", 
+     RowBox[{"Tally", "@", 
+      RowBox[{"Flatten", "[", "cleanedlinks", "]"}]}]}]}], "\n", 
+   "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "this", " ", "function", " ", "will", " ", "consider", " ", "links", " ", 
+    "multiplicity", " ", "and", " ", "links", " ", "with", " ", "at", " ", 
+    "least", " ", "2", " ", "repetitions"}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582499717022997*^9, 3.582499873086062*^9}, {
+   3.582499913772024*^9, 3.582499915876026*^9}, {3.582499967150619*^9, 
+   3.5824999716333427`*^9}, {3.5825026435040894`*^9, 3.582502650904758*^9}, {
+   3.582502863258078*^9, 3.58250288959753*^9}, {3.5825629148044*^9, 
+   3.5825629334146643`*^9}, {3.582563260077615*^9, 3.582563285784018*^9}, 
+   3.588575931495825*^9, 3.588575981580186*^9, {3.5886802226451273`*^9, 
+   3.588680237531424*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Import", "Subsection",
+ CellChangeTimes->{{3.588576654758519*^9, 3.588576667527248*^9}, {
+  3.5885787146677103`*^9, 3.588578717432787*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Importing first level links", "Subsubsection",
+ CellChangeTimes->{{3.588576000734262*^9, 3.588576035195856*^9}}],
+
+Cell[TextData[{
+ StyleBox["Init_",
+  FontWeight->"Bold"],
+ " dev\[CloseCurlyQuote]essere della forma \[OpenCurlyDoubleQuote]titolo\
+\[CloseCurlyDoubleQuote], dove ",
+ StyleBox["titolo ",
+  FontSlant->"Italic"],
+ "\[EGrave] esattamente la dicitura nel link en.wikipedia"
+}], "Text",
+ CellChangeTimes->{{3.588576207077312*^9, 3.5885762768312674`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"importFirstLevelLinks", "[", "init_", "]"}], ":=", " ", 
+  RowBox[{"cleanlinks", " ", "@", " ", "\n", "\t", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{"\"\<http://en.wikipedia.org/wiki/\>\"", "<>", "init"}], ",", 
+     " ", "\"\<Hyperlinks\>\""}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "this", " ", "output", " ", "is", " ", "a", " ", "list", " ", "of", " ", 
+    "weighted", " ", "links", " ", "with", " ", "their", " ", 
+    "multiplicity"}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582562513803823*^9, 3.582562575739441*^9}, {
+   3.582562670010065*^9, 3.582562737445911*^9}, 3.582562913379315*^9, {
+   3.582563354835919*^9, 3.582563372408746*^9}, {3.5825658987666187`*^9, 
+   3.5825659225006638`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"importFirstLevelLinks2", "[", "init_", "]"}], ":=", " ", 
+  RowBox[{"cleanlinks2", " ", "@", " ", "\n", "\t", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{"\"\<http://en.wikipedia.org/wiki/\>\"", "<>", "init"}], ",", 
+     " ", "\"\<Hyperlinks\>\""}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "this", " ", "output", " ", "is", " ", "a", " ", "list", " ", "of", " ", 
+    "weighted", " ", "links", " ", "with", " ", "their", " ", 
+    "multiplicity"}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582562513803823*^9, 3.582562575739441*^9}, {
+   3.582562670010065*^9, 3.582562737445911*^9}, 3.582562913379315*^9, {
+   3.582563354835919*^9, 3.582563372408746*^9}, {3.5825658987666187`*^9, 
+   3.5825659225006638`*^9}, {3.588680406686193*^9, 3.588680407694046*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createFirstLevelWeightedEdges", "[", 
+   RowBox[{"init_", ",", "weightedlinks_"}], "]"}], ":=", "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"init", ",", 
+      RowBox[{"Last", "@", 
+       RowBox[{"StringSplit", "[", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", "\"\</\>\""}], "]"}]}], ",", 
+      RowBox[{"#", "[", 
+       RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], " ", "/@", " ", 
+   "weightedlinks"}]}]], "Code",
+ CellChangeTimes->{{3.58256279692735*^9, 3.582562893001288*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Importing second level links", "Subsubsection",
+ CellChangeTimes->{{3.588576000734262*^9, 3.588576047943109*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"importSecondLevelLinks", "[", "firstLevelLinks_", "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"cleanlinks", " ", "@", " ", 
+      RowBox[{"Import", "[", 
+       RowBox[{"#", ",", "\"\<Hyperlinks\>\""}], "]"}]}], ")"}], "&"}], " ", "/@",
+    " ", 
+   RowBox[{"firstLevelLinks", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "1"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582563146588324*^9, 3.582563202096096*^9}, {
+  3.582563464818244*^9, 3.582563483504982*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"importSecondLevelLinks2", "[", "firstLevelLinks_", "]"}], ":=", 
+  " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"cleanlinks2", " ", "@", " ", 
+      RowBox[{"Import", "[", 
+       RowBox[{"#", ",", "\"\<Hyperlinks\>\""}], "]"}]}], ")"}], "&"}], " ", "/@",
+    " ", 
+   RowBox[{"firstLevelLinks", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "1"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582563146588324*^9, 3.582563202096096*^9}, {
+  3.582563464818244*^9, 3.582563483504982*^9}, {3.588680425171879*^9, 
+  3.588680427923794*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createSecondLevelWeightedEdges", "[", 
+   RowBox[{"firstNeighbors_", ",", "secondLevelLinks_"}], "]"}], ":=", "\n", 
+  "\t", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"secondNeighbors", ",", "secondNeighborsWeighted"}], "}"}], ",", 
+    "\[IndentingNewLine]", "\t\t", 
+    RowBox[{
+     RowBox[{"secondNeighbors", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Last", "[", 
+          RowBox[{"StringSplit", "[", 
+           RowBox[{"#", ",", "\"\</\>\""}], "]"}], "]"}], "&"}], ",", 
+        RowBox[{"secondLevelLinks", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "All", ",", "1"}], "]"}], "]"}], ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t\t", 
+     RowBox[{"secondNeighborsWeighted", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"secondNeighbors", "[", 
+            RowBox[{"[", "#", "]"}], "]"}], ",", 
+           RowBox[{"secondLevelLinks", "[", 
+            RowBox[{"[", 
+             RowBox[{"#", ",", "All", ",", "2"}], "]"}], "]"}]}], "}"}], 
+         "]"}], "&"}], " ", "/@", " ", 
+       RowBox[{"Range", "[", 
+        RowBox[{"1", ",", 
+         RowBox[{"Length", "[", "secondNeighbors", "]"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", "\t\t", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"Outer", "[", "\n", "\t\t\t", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"{", 
+              RowBox[{"#1", ",", "#2"}], "}"}], "]"}], "&"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"firstNeighbors", "[", 
+             RowBox[{"[", "#", "]"}], "]"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"secondNeighborsWeighted", "[", 
+             RowBox[{"[", "#", "]"}], "]"}], "}"}], ",", "2"}], "]"}], "&"}], 
+        " ", "/@", " ", 
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"Length", "[", "firstNeighbors", "]"}]}], "]"}]}], ",", 
+       "3"}], "]"}]}]}], " ", "\[IndentingNewLine]", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582564642414177*^9, 3.582564674299406*^9}, {
+  3.582564723176594*^9, 3.582564739662262*^9}, {3.582564843521192*^9, 
+  3.582564867235384*^9}, {3.582564905864854*^9, 3.5825649286034107`*^9}, {
+  3.5825650195699883`*^9, 3.582565041100698*^9}, {3.582565081770095*^9, 
+  3.582565115009295*^9}, {3.582565168387762*^9, 3.582565298833727*^9}, {
+  3.5825654676214037`*^9, 3.582565496177476*^9}, {3.582565599702738*^9, 
+  3.582565619611217*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Create the Sub-Graph until second level\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5885760949660463`*^9, 3.588576101668906*^9}, {
+  3.588576676073744*^9, 3.5885766769058733`*^9}, {3.588578731180646*^9, 
+  3.5885787369656277`*^9}, {3.5885788742010593`*^9, 3.588578886449761*^9}, {
+  3.588578940642449*^9, 3.58857894147051*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"findFirstNeighbors", "[", "firstLevelLinks_", "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Last", "@", 
+     RowBox[{"StringSplit", "[", 
+      RowBox[{"#", ",", "\"\</\>\""}], "]"}]}], "&"}], " ", "/@", 
+   RowBox[{"firstLevelLinks", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "1"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.5825629873078623`*^9, 3.5825629945717297`*^9}, {
+  3.582563060512906*^9, 3.582563097967441*^9}, {3.582564686941228*^9, 
+  3.58256468895494*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createTheGraph", "[", "init_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"firstLevel", ",", "secondLevel"}], "}"}], ",", "\n", 
+    RowBox[{
+     RowBox[{"firstLevel", "=", 
+      RowBox[{"importFirstLevelLinks", "[", "init", "]"}]}], ";", "\n", 
+     RowBox[{"secondLevel", "=", 
+      RowBox[{"importSecondLevelLinks", "[", "firstLevel", "]"}]}], ";", "\n", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"createFirstLevelWeightedEdges", "[", 
+          RowBox[{"init", ",", "firstLevel"}], "]"}], ",", 
+         RowBox[{"createSecondLevelWeightedEdges", "[", 
+          RowBox[{
+           RowBox[{"findFirstNeighbors", "[", "firstLevel", "]"}], ",", 
+           "secondLevel"}], "]"}]}], "}"}], ",", "1"}], "]"}]}]}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "the", " ", "output", " ", "is", " ", "a", " ", "list", " ", "of", " ", 
+     "weighted", " ", "edges"}], " ", "*)"}], "\n", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582565779343565*^9, 3.582565881071094*^9}, {
+  3.582565927873314*^9, 3.582566163392541*^9}, {3.582566360880218*^9, 
+  3.582566385234556*^9}, {3.5886799979614553`*^9, 3.588680022056471*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Create the Sub-Graph until second level considering all hyperlinks\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5885760949660463`*^9, 3.588576101668906*^9}, {
+  3.588576676073744*^9, 3.5885766769058733`*^9}, {3.588578731180646*^9, 
+  3.5885787369656277`*^9}, {3.5885788742010593`*^9, 3.588578886449761*^9}, {
+  3.588578940642449*^9, 3.58857894147051*^9}, {3.5886803361971607`*^9, 
+  3.588680349947688*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createTheGraph2", "[", "init_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"firstLevel", ",", "secondLevel"}], "}"}], ",", "\n", 
+    RowBox[{
+     RowBox[{"firstLevel", "=", 
+      RowBox[{"importFirstLevelLinks2", "[", "init", "]"}]}], ";", "\n", 
+     RowBox[{"secondLevel", "=", 
+      RowBox[{"importSecondLevelLinks2", "[", "firstLevel", "]"}]}], ";", 
+     "\n", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"createFirstLevelWeightedEdges", "[", 
+          RowBox[{"init", ",", "firstLevel"}], "]"}], ",", 
+         RowBox[{"createSecondLevelWeightedEdges", "[", 
+          RowBox[{
+           RowBox[{"findFirstNeighbors", "[", "firstLevel", "]"}], ",", 
+           "secondLevel"}], "]"}]}], "}"}], ",", "1"}], "]"}]}]}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "the", " ", "output", " ", "is", " ", "a", " ", "list", " ", "of", " ", 
+     "weighted", " ", "edges"}], " ", "*)"}], "\n", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582565779343565*^9, 3.582565881071094*^9}, {
+   3.582565927873314*^9, 3.582566163392541*^9}, {3.582566360880218*^9, 
+   3.582566385234556*^9}, {3.5886799979614553`*^9, 3.588680022056471*^9}, 
+   3.5886803640507393`*^9, {3.5886804695202293`*^9, 3.588680472958902*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Create the Sub-Graph until third level\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.588576000734262*^9, 3.588576047943109*^9}, {
+   3.5885789031614113`*^9, 3.588578903838297*^9}, 3.588589927269835*^9, {
+   3.588589970031761*^9, 3.588589970496958*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createTheGraphThirdLevel", "[", "init_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"firstLevel", ",", "secondLevel", ",", "thirdLevel"}], "}"}], 
+    ",", "\n", 
+    RowBox[{
+     RowBox[{"firstLevel", "=", 
+      RowBox[{"importFirstLevelLinks", "[", "init", "]"}]}], ";", "\n", 
+     RowBox[{"secondLevel", "=", 
+      RowBox[{"importSecondLevelLinks", "[", "firstLevel", "]"}]}], ";", "\n", 
+     RowBox[{"thirdLevel", "=", " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"importSecondLevelLinks", "[", "#", "]"}], "&"}], " ", "/@", 
+       " ", "secondLevel"}]}], ";", "\n", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"createFirstLevelWeightedEdges", "[", 
+          RowBox[{"init", ",", "firstLevel"}], "]"}], ",", 
+         RowBox[{"createSecondLevelWeightedEdges", "[", 
+          RowBox[{
+           RowBox[{"findFirstNeighbors", "[", "firstLevel", "]"}], ",", 
+           "secondLevel"}], "]"}], ",", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"createSecondLevelWeightedEdges", "[", 
+              RowBox[{
+               RowBox[{"findFirstNeighbors", "[", "#1", "]"}], ",", "#2"}], 
+              "]"}], "&"}], " ", "@@@", " ", 
+            RowBox[{"Transpose", "[", 
+             RowBox[{"{", 
+              RowBox[{"secondLevel", ",", "thirdLevel"}], "}"}], "]"}]}], ",",
+            "1"}], "]"}]}], "}"}], ",", "1"}], "]"}]}]}], "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+    "the", " ", "output", " ", "is", " ", "a", " ", "list", " ", "of", " ", 
+     "weighted", " ", "edges"}], " ", "*)"}], "\n", "]"}]}]], "Code",
+ CellChangeTimes->{{3.588592096567272*^9, 3.588592117535399*^9}, {
+   3.58859216554287*^9, 3.588592202176787*^9}, {3.5885922977062798`*^9, 
+   3.58859232926234*^9}, {3.58859327018748*^9, 3.5885932766419487`*^9}, {
+   3.588594692097727*^9, 3.588594703541875*^9}, {3.5886778295854063`*^9, 
+   3.5886778480172033`*^9}, 3.58867892126654*^9, 3.588680028101038*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Controls", "Subsection",
+ CellChangeTimes->{{3.5885765435906363`*^9, 3.588576546452495*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Remove Self Loops", "Subsubsection",
+ CellChangeTimes->{{3.582581632199626*^9, 3.582581644100657*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NoSelfLoopGraph", "[", "EdgesList_", "]"}], ":=", " ", 
+  RowBox[{"DeleteCases", "[", 
+   RowBox[{"EdgesList", ",", 
+    RowBox[{"{", 
+     RowBox[{"a_", ",", "a_", ",", "__"}], "}"}]}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582571592092113*^9, 3.582571633191206*^9}, 
+   3.582573236980083*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Correct Multiplicity: remove Multi Edges and update Weights", \
+"Subsubsection",
+ CellChangeTimes->{{3.5825768858645773`*^9, 3.58257690402143*^9}, {
+  3.582577109626791*^9, 3.582577121190824*^9}, {3.58258164934122*^9, 
+  3.582581666692767*^9}, {3.5825818745899057`*^9, 3.582581903252935*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NewGraphWithCorrectMultiplicity", "[", "Edges_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "unweighted", ",", "repetitions", ",", "positions", ",", "\n", 
+      "replaceIndices", ",", "deleteIndices", ",", "updates", ",", "subs", 
+      ",", "checkedFirst", ",", "checkedFinal"}], "}"}], ",", "\n", 
+    RowBox[{
+     RowBox[{"unweighted", "=", 
+      RowBox[{"Edges", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", 
+         RowBox[{";;", "2"}]}], "]"}], "]"}]}], ";", "\n", 
+     RowBox[{"repetitions", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{
+        RowBox[{"Tally", "[", "unweighted", "]"}], ",", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], ">", "1"}], ")"}], "&"}]}], 
+       "]"}]}], ";", "\n", 
+     RowBox[{"positions", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Position", "[", 
+         RowBox[{"unweighted", ",", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", 
+            RowBox[{";;", "2"}], "]"}], "]"}]}], "]"}], "&"}], "@@@", " ", 
+       "repetitions"}]}], ";", "\n", 
+     RowBox[{"replaceIndices", "=", 
+      RowBox[{"positions", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ";", "\n", 
+     RowBox[{"deleteIndices", "=", 
+      RowBox[{"positions", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", "2"}], "]"}], "]"}]}], ";", "\n", 
+     RowBox[{"updates", "=", 
+      RowBox[{"Partition", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Edges", "[", 
+              RowBox[{"[", 
+               RowBox[{
+                RowBox[{"#1", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{";;", "2"}]}], "]"}], "]"}], ",", 
+             RowBox[{
+              RowBox[{"Edges", "[", 
+               RowBox[{"[", 
+                RowBox[{
+                 RowBox[{"#1", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", "3"}], "]"}], "]"}], 
+              "+", 
+              RowBox[{"Edges", "[", 
+               RowBox[{"[", 
+                RowBox[{
+                 RowBox[{"#1", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", "3"}], "]"}], 
+               "]"}]}]}], "}"}], "&"}], "/@", " ", "positions"}], "]"}], ",", 
+        "3"}], "]"}]}], ";", "\n", 
+     RowBox[{"subs", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"#1", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1"}], "]"}], "]"}], "\[Rule]", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "  ", ",", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{"replaceIndices", ",", "updates"}], "}"}], "]"}]}], "]"}]}],
+      ";", "\n", 
+     RowBox[{"checkedFirst", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"Edges", ",", "subs"}], "]"}]}], ";", "\n", 
+     RowBox[{"checkedFinal", "=", 
+      RowBox[{"Delete", "[", 
+       RowBox[{"checkedFirst", ",", "deleteIndices"}], "]"}]}]}]}], "\n", 
+   "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+     "this", " ", "function", " ", "controls", " ", "and", " ", "corrects", 
+      " ", "repetitions", " ", "in", " ", "the", " ", "graph"}], ",", " ", 
+     RowBox[{"just", " ", "use", " ", "it", " ", "once"}]}], "*)"}], "\n", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.582576915908737*^9, 3.582576992591934*^9}, {
+  3.582577074037278*^9, 3.58257710257574*^9}, {3.582577204982039*^9, 
+  3.5825772062541323`*^9}}],
+
+Cell["\<\
+Apply both corrections just once:\
+\>", "Text",
+ CellChangeTimes->{{3.589017637959558*^9, 3.589017678304981*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CorrectedGraph", "[", "EdgesList_List", "]"}], ":=", " ", 
+  RowBox[{"NewGraphWithCorrectMultiplicity", "[", 
+   RowBox[{"NoSelfLoopGraph", "[", "EdgesList", "]"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.589017587376356*^9, 3.5890176271257753`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Print and Read a file", "Subsection",
+ CellChangeTimes->{{3.589015460972228*^9, 3.589015462808651*^9}, {
+   3.589015529067679*^9, 3.589015548924127*^9}, 3.589015987052268*^9}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Print the Sub-Graph on a TSV file\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.588949948052658*^9, 3.588949952209516*^9}, {
+  3.588951778871228*^9, 3.58895179783908*^9}}],
+
+Cell["As a list of weighted EDGES", "Text",
+ CellChangeTimes->{{3.588952520418727*^9, 3.588952531399478*^9}, {
+  3.588953015118197*^9, 3.588953018289504*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PrintEdges", "[", 
+   RowBox[{"EdgesList_List", ",", "outputFile_"}], "]"}], ":=", " ", 
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+    "\"\</Users/Levantina/Documents/FISICA/TESIPOP/Network/\>\"", "<>", 
+     "outputFile"}], ",", "EdgesList", ",", "\"\<TSV\>\""}], "]"}]}]], "Code",\
+
+ CellChangeTimes->{{3.588950220149878*^9, 3.588950384807287*^9}, {
+  3.588950533902021*^9, 3.5889505536947393`*^9}, {3.5889507521804457`*^9, 
+  3.5889508199661818`*^9}, {3.5889517421878633`*^9, 3.588951763154819*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Import the Sub-Graph from a TSV file\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.589015473954*^9, 3.589015485704443*^9}, {
+  3.589015521883272*^9, 3.589015522699613*^9}}],
+
+Cell["As a list of weighted EDGES", "Text",
+ CellChangeTimes->{{3.589015502019455*^9, 3.589015517331653*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ImportNetwork", "[", "filename_", "]"}], ":=", " ", 
+  RowBox[{"Import", "[", 
+   RowBox[{
+    RowBox[{
+    "\"\</Users/Levantina/Documents/FISICA/TESIPOP/Network/\>\"", "<>", 
+     "filename"}], ",", "\"\<TSV\>\""}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.58895214985492*^9, 3.588952179469009*^9}, {
+  3.5889524880442963`*^9, 3.588952510177991*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Operations", "Subsection",
+ CellChangeTimes->{{3.589015561062478*^9, 3.589015565396153*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["List of Pages", "Subsubsection",
+ CellChangeTimes->{{3.589015608163065*^9, 3.5890156089139338`*^9}, {
+  3.589015920168981*^9, 3.589015921624733*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PagesList", "[", "EdgesList_List", "]"}], ":=", " ", 
+  RowBox[{"Union", "[", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{"EdgesList", "[", 
+     RowBox[{"[", 
+      RowBox[{"All", ",", 
+       RowBox[{";;", "2"}]}], "]"}], "]"}], "]"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.589015809758389*^9, 3.589015874246418*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1231, 756},
+WindowMargins->{{Automatic, -1271}, {Automatic, -19}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 163, 2, 80, "Section"],
+Cell[CellGroupData[{
+Cell[767, 28, 96, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[888, 33, 131, 3, 35, "Subsubsection"],
+Cell[1022, 38, 437, 13, 201, "Text"],
+Cell[1462, 53, 1908, 44, 192, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3407, 102, 136, 3, 35, "Subsubsection"],
+Cell[3546, 107, 160, 2, 30, "Text"],
+Cell[3709, 111, 1962, 45, 192, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5720, 162, 145, 2, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[5890, 168, 118, 1, 35, "Subsubsection"],
+Cell[6011, 171, 349, 9, 30, "Text"],
+Cell[6363, 182, 785, 17, 82, "Code"],
+Cell[7151, 201, 833, 17, 82, "Code"],
+Cell[7987, 220, 586, 16, 66, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8610, 241, 119, 1, 35, "Subsubsection"],
+Cell[8732, 244, 538, 14, 50, "Code"],
+Cell[9273, 260, 592, 16, 50, "Code"],
+Cell[9868, 278, 2677, 66, 146, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12582, 349, 338, 6, 35, "Subsubsection"],
+Cell[12923, 357, 529, 13, 50, "Code"],
+Cell[13455, 372, 1253, 28, 130, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14745, 405, 416, 7, 35, "Subsubsection"],
+Cell[15164, 414, 1340, 30, 130, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16541, 449, 261, 5, 35, "Subsubsection"],
+Cell[16805, 456, 2103, 48, 146, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18957, 510, 98, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[19080, 515, 108, 1, 35, "Subsubsection"],
+Cell[19191, 518, 331, 8, 50, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19559, 531, 298, 4, 35, "Subsubsection"],
+Cell[19860, 537, 3706, 101, 257, "Code"],
+Cell[23569, 640, 123, 3, 30, "Text"],
+Cell[23695, 645, 285, 5, 50, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24029, 656, 181, 2, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[24235, 662, 180, 4, 35, "Subsubsection"],
+Cell[24418, 668, 158, 2, 30, "Text"],
+Cell[24579, 672, 546, 12, 50, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25162, 689, 181, 4, 35, "Subsubsection"],
+Cell[25346, 695, 109, 1, 30, "Text"],
+Cell[25458, 698, 386, 9, 50, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[25893, 713, 98, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[26016, 718, 155, 2, 35, "Subsubsection"],
+Cell[26174, 722, 353, 9, 50, "Code"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

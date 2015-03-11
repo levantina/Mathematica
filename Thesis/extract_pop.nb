@@ -1,0 +1,608 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     19810,        599]
+NotebookOptionsPosition[     18131,        541]
+NotebookOutlinePosition[     18490,        557]
+CellTagsIndexPosition[     18447,        554]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Extract Popularity Time Series", "Section",
+ CellChangeTimes->{{3.588946444403503*^9, 3.588946450741055*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["http://stats.grok.se/json/en/", "Subsection",
+ CellChangeTimes->{{3.588946462069612*^9, 3.588946480661252*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Extract and Print on a jason file\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5889465215890408`*^9, 3.588946531555851*^9}}],
+
+Cell["\<\
+Create a list of dates as strings \[OpenCurlyDoubleQuote]200910\
+\[CloseCurlyDoubleQuote] - \[OpenCurlyDoubleQuote]YearMonth\
+\[CloseCurlyDoubleQuote] - giving the dates Start and End, in this form \
+{2010,10} (as list of numbers).\
+\>", "Text",
+ CellChangeTimes->{{3.5890251966540613`*^9, 3.5890253074132977`*^9}, {
+  3.5890253618181963`*^9, 3.589025404685788*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"createDates", "[", 
+    RowBox[{"init_", ",", "end_"}], "]"}], ":=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringJoin", "[", 
+      RowBox[{
+       RowBox[{"ToString", "[", "#", "]"}], ",", "\n", "\t", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"#2", "<", "10"}], ",", 
+         RowBox[{"StringJoin", "[", 
+          RowBox[{
+           RowBox[{"ToString", "[", "0", "]"}], ",", 
+           RowBox[{"ToString", "[", "#2", "]"}]}], "]"}], ",", 
+         RowBox[{"ToString", "[", "#2", "]"}]}], "]"}]}], "]"}], "&"}], "@@@",
+     " ", 
+    RowBox[{"DateRange", "[", 
+     RowBox[{"init", ",", "end", ",", "\"\<Month\>\""}], "]"}]}]}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"input", " ", "of", " ", "this", " ", "form", " ", 
+     RowBox[{"{", 
+      RowBox[{"2010", ",", "10"}], "}"}], " ", 
+     RowBox[{"(", 
+      RowBox[{"as", " ", "list", " ", "of", " ", "numbers"}], ")"}]}], ",", 
+    " ", "\n", " ", 
+    RowBox[{"output", " ", "has", " ", "this", " ", "form", " ", 
+     RowBox[{"{", 
+      RowBox[{
+      "\"\<200910\>\"", ",", "\"\<200911\>\"", ",", "\"\<200910\>\"", ",", 
+       ".."}], "}"}]}]}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.589025034006208*^9, 3.5890250526764717`*^9}, {
+  3.589025099875564*^9, 3.589025127522187*^9}, {3.589025322836315*^9, 
+  3.589025350233536*^9}, {3.6163324625212507`*^9, 3.61633246594729*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"importingOnFile", "[", 
+    RowBox[{"dates_List", ",", "pages_", ",", "outputfile_"}], "]"}], ":=", 
+   "\n", 
+   RowBox[{"Do", "[", "\n", "\t", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Import", "[", 
+          RowBox[{
+           RowBox[{
+           "\"\<http://stats.grok.se/json/en/\>\"", "<>", "#1", "<>", 
+            "\"\</\>\"", "<>", 
+            RowBox[{"pages", "[", 
+             RowBox[{"[", "i", "]"}], "]"}]}], ",", " ", "\"\<JSON\>\""}], 
+          "]"}], ">>>", "\n", "\t\t", 
+         RowBox[{
+         "\"\</Users/Levantina/Documents/FISICA/TESIPOP/Timeseries/\>\"", "<>",
+           "outputfile"}]}], ")"}], " ", "&"}], " ", "/@", " ", "dates"}], 
+     "\n", "\t", ",", "\n", "\t", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "[", "pages", "]"}]}], "}"}]}], "]"}]}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"dates_List", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<200910\>\"", ",", "\"\<200911\>\"", ",", "\"\<200910\>\"", ",", 
+        ".."}], "}"}], " ", "in", " ", "months"}]}], ",", " ", 
+    RowBox[{"in", " ", "crescent", " ", "order"}], ",", " ", 
+    RowBox[{"pages", " ", "=", " ", 
+     RowBox[{"list", " ", "of", " ", "vertexes"}]}], ",", " ", 
+    RowBox[{"outputfile", "=", " ", "\"\<name.format\>\""}]}], " ", 
+   "*)"}]}]}], "Code",
+ CellChangeTimes->{
+  3.588946544867372*^9, {3.588947122906201*^9, 3.5889471297759743`*^9}, 
+   3.589027230257222*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"importingOnFile2", "[", 
+    RowBox[{"dates_List", ",", "pages_", ",", "outputfile_"}], "]"}], ":=", 
+   "\n", 
+   RowBox[{"Do", "[", "\n", "\t", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Import", "[", 
+          RowBox[{
+           RowBox[{
+           "\"\<http://stats-classic.grok.se/json/en/\>\"", "<>", "#1", "<>", 
+            "\"\</\>\"", "<>", 
+            RowBox[{"pages", "[", 
+             RowBox[{"[", "i", "]"}], "]"}]}], ",", " ", "\"\<JSON\>\""}], 
+          "]"}], ">>>", "\n", "\t\t", 
+         RowBox[{
+         "\"\</Users/Levantina/Documents/FISICA/TESIPOP/Timeseries/\>\"", "<>",
+           "outputfile"}]}], ")"}], " ", "&"}], " ", "/@", " ", "dates"}], 
+     "\n", "\t", ",", "\n", "\t", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "[", "pages", "]"}]}], "}"}]}], "]"}]}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+    RowBox[{"dates_List", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<200910\>\"", ",", "\"\<200911\>\"", ",", "\"\<200910\>\"", ",", 
+        ".."}], "}"}], " ", "in", " ", "months"}]}], ",", " ", 
+    RowBox[{"in", " ", "crescent", " ", "order"}], ",", " ", 
+    RowBox[{"pages", " ", "=", " ", 
+     RowBox[{"list", " ", "of", " ", "vertexes"}]}], ",", " ", 
+    RowBox[{"outputfile", "=", " ", "\"\<name.format\>\""}]}], " ", 
+   "*)"}]}]}], "Code",
+ CellChangeTimes->{
+  3.588946544867372*^9, {3.588947122906201*^9, 3.5889471297759743`*^9}, 
+   3.589027230257222*^9, {3.6060483096069117`*^9, 3.606048314883357*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Clean Time Series", "Subsubsection",
+ CellChangeTimes->{{3.582582129239728*^9, 3.582582139277193*^9}, {
+  3.589201625952248*^9, 3.5892016266624327`*^9}}],
+
+Cell["\<\
+This function reads from file the time series, knowing how many months.\
+\>", "Text",
+ CellChangeTimes->{{3.5825794942416687`*^9, 3.5825795241275806`*^9}, 
+   3.589015173021044*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"readingTimeSeries", "[", 
+   RowBox[{"file_", ",", "Nmonths_"}], "]"}], ":=", " ", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+   "\"\</Users/Levantina/Documents/FISICA/TESIPOP/Timeseries/\>\"", "<>", 
+    "file"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582314990115505*^9, 3.582315030921545*^9}, {
+   3.58231507370012*^9, 3.582315074406612*^9}, {3.582315115805582*^9, 
+   3.58231513536471*^9}, {3.582315186103466*^9, 3.582315189100485*^9}, {
+   3.5823155500336533`*^9, 3.5823155776440887`*^9}, {3.582316388307046*^9, 
+   3.5823163889620867`*^9}, 3.5824004842210627`*^9, 3.583176464404974*^9, {
+   3.588950072877249*^9, 3.5889500794512157`*^9}, 3.5890151042430687`*^9, {
+   3.5890274304368896`*^9, 3.58902743179552*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CleanTimeSeries", "[", "series_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"FromDigits", " ", "/@", " ", 
+       RowBox[{"StringSplit", "[", 
+        RowBox[{"#", ",", "\"\<-\>\""}], "]"}]}], ",", "#2"}], "}"}], "&"}], 
+   " ", "@@@", " ", 
+   RowBox[{"series", "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582300005949795*^9, 3.582300046452704*^9}, {
+  3.582300129797895*^9, 3.582300141014222*^9}, {3.582300607646852*^9, 
+  3.582300608914565*^9}}],
+
+Cell["\<\
+This function cleans imported data and makes them ready to be plotted and \
+analyzed.\
+\>", "Text",
+ CellChangeTimes->{{3.582579539303482*^9, 3.582579590584704*^9}, {
+  3.5825797013324013`*^9, 3.582579747380018*^9}, {3.589201657030658*^9, 
+  3.5892016637259197`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtractTimeSeries", "[", 
+   RowBox[{"imported_List", ",", "Nmonths_Integer"}], "]"}], ":=", 
+  RowBox[{"Partition", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"CleanTimeSeries", "[", "#", "]"}], "&"}], " ", "/@", " ", 
+     "imported"}], ",", "Nmonths"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582316410393211*^9, 3.582316502527009*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Process and Plot Cleaned Time Series", "Subsubsection",
+ CellChangeTimes->{{3.589201631240513*^9, 3.5892016476780367`*^9}}],
+
+Cell["\<\
+This function is useful to study the average behavior of a sample of pages.\
+\>", "Text",
+ CellChangeTimes->{{3.5825807546938047`*^9, 3.582580788276102*^9}, 
+   3.5831097921513577`*^9, 3.589201733284307*^9}],
+
+Cell["\<\
+Mean and Standard Deviation of visitors of a page in time.\
+\>", "Text",
+ CellChangeTimes->{{3.589201738475665*^9, 3.589201756571446*^9}, {
+  3.5892018060121393`*^9, 3.589201809667179*^9}, {3.589201893212234*^9, 
+  3.5892019171034603`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SafeMean", "[", "onePage_", "]"}], ":=", " ", 
+  RowBox[{"N", "@", 
+   RowBox[{"Mean", "[", 
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"Flatten", " ", "@", " ", 
+       RowBox[{"onePage", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}]}], ",", 
+      RowBox[{"Except", "[", "0", "]"}]}], "]"}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"SafeStandardDev", "[", "onePage_", "]"}], ":=", " ", 
+  RowBox[{"N", "@", 
+   RowBox[{"StandardDeviation", "[", 
+    RowBox[{"Cases", "[", 
+     RowBox[{
+      RowBox[{"Flatten", " ", "@", " ", 
+       RowBox[{"onePage", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}]}], ",", 
+      RowBox[{"Except", "[", "0", "]"}]}], "]"}], "]"}]}]}]}], "Code",
+ CellChangeTimes->{{3.5892013282995863`*^9, 3.589201332337048*^9}, {
+  3.589201429204544*^9, 3.5892015254950247`*^9}, {3.5892015680575523`*^9, 
+  3.589201572296892*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"averageTimeSeries", "[", "cleanedTS_", "]"}], ":=", " ", 
+  RowBox[{"N", "@", 
+   RowBox[{"Mean", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Flatten", "[", 
+       RowBox[{"cleanedTS", "[", 
+        RowBox[{"[", 
+         RowBox[{"#", ",", "All", ",", "All", ",", "2"}], "]"}], "]"}], "]"}],
+       "&"}], " ", "/@", " ", 
+     RowBox[{"Range", "[", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "cleanedTS", "]"}]}], "]"}]}], 
+    "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582580637704607*^9, 3.5825806860081663`*^9}, 
+   3.5831764584257*^9}],
+
+Cell["This function plots the popularity for the selected Vertex:", "Text",
+ CellChangeTimes->{{3.582579359812401*^9, 3.582579396079618*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PlotTimeSeries", "[", 
+   RowBox[{"series_", ",", "opts___"}], "]"}], ":=", " ", 
+  RowBox[{"DateListPlot", "[", 
+   RowBox[{"series", ",", 
+    RowBox[{"Joined", " ", "\[Rule]", "True"}], ",", "opts"}], 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.5823001148601713`*^9, 3.58230016471362*^9}, {
+  3.582300433263279*^9, 3.5823004437188683`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ShowTimeSeries", "[", 
+   RowBox[{
+   "index_", ",", "vertices_", ",", "imported_List", ",", "Nmonths_Integer"}],
+    "]"}], ":=", " ", "\n", "\t", 
+  RowBox[{"PlotTimeSeries", "[", "\n", "\t\t", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ExtractTimeSeries", "[", 
+      RowBox[{"imported", ",", "Nmonths"}], "]"}], "[", 
+     RowBox[{"[", "index", "]"}], "]"}], ",", "\n", "\t\t\t", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+    RowBox[{"PlotLabel", "\[Rule]", 
+     RowBox[{"vertices", "[", 
+      RowBox[{"[", "index", "]"}], "]"}]}]}], "\n", "\t", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582316333907489*^9, 3.5823163815002623`*^9}, {
+  3.582316489684134*^9, 3.582316512404997*^9}, {3.5823165489254837`*^9, 
+  3.582316675336319*^9}, {3.582316729178678*^9, 3.5823167330180387`*^9}, {
+  3.5823170842251673`*^9, 3.5823171081732407`*^9}, {3.589108190962016*^9, 
+  3.589108192309557*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Remove non - existing days from Time Series:", "Subsubsection",
+ CellChangeTimes->{{3.604315875744624*^9, 3.604315944385537*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"LeapYearQ", "[", "2010", "]"}]], "Input",
+ CellChangeTimes->{{3.5898943041209297`*^9, 3.589894308530018*^9}}],
+
+Cell[BoxData["False"], "Output",
+ CellChangeTimes->{3.58989430953621*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"commonYear", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+    "31", ",", "28", ",", "31", ",", "30", ",", "31", ",", "30", ",", "31", 
+     ",", "31", ",", "30", ",", "31", ",", "30", ",", "31"}], "}"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.589117625764855*^9, 3.589117654248644*^9}, {
+  3.5891177025295277`*^9, 3.589117730729795*^9}, {3.5891177628082027`*^9, 
+  3.589117768376236*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"leapYear", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "31", ",", "29", ",", "31", ",", "30", ",", "31", ",", "30", ",", "31", 
+     ",", "31", ",", "30", ",", "31", ",", "30", ",", "31"}], "}"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.589117771271776*^9, 3.58911778936277*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"nonExistingCommonDays", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "02", ",", "30"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "2", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "4", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "06", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "09", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "11", ",", "31"}], "}"}], ",", "__"}], "}"}]}], 
+    "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.5892026494106827`*^9, 3.58920281121238*^9}, {
+  3.589203123315279*^9, 3.5892031372820263`*^9}, {3.589203293675892*^9, 
+  3.589203319801673*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"nonExistingLeapDays", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "02", ",", "29"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "02", ",", "30"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "2", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "4", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "06", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "09", ",", "31"}], "}"}], ",", "__"}], "}"}], ",", 
+     
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__", ",", "11", ",", "31"}], "}"}], ",", "__"}], "}"}]}], 
+    "}"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.589202823526857*^9, 3.589202848812087*^9}, {
+  3.589203323858323*^9, 3.589203334409878*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"RelativeDistance", "[", "onePage_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"With", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"m", "=", 
+        RowBox[{"N", "@", 
+         RowBox[{"Mean", "[", 
+          RowBox[{"Cases", "[", 
+           RowBox[{
+            RowBox[{"Flatten", " ", "@", " ", "#"}], ",", 
+            RowBox[{"Except", "[", "0", "]"}]}], "]"}], "]"}]}]}], "}"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"#", "!=", "0"}], ",", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"N", "@", 
+              RowBox[{"(", 
+               RowBox[{"#", "-", "m"}], ")"}]}], "/", 
+             RowBox[{"If", "[", 
+              RowBox[{
+               RowBox[{"m", "\[NotEqual]", "0"}], ",", "m", ",", "1"}], 
+              "]"}]}], ")"}], ",", "0"}], "]"}], ")"}], "&"}], "/@", " ", 
+       "#"}]}], "]"}], "&"}], "/@", " ", 
+   RowBox[{"onePage", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.589206258876526*^9, 3.589206300231523*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"veryGoodTSB", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"Alternatives", " ", "@@", " ", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"LeapYearQ", "[", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ",", "1", ",", "1"}], "]"}], "]"}], "]"}], ",", 
+            "nonExistingLeapDays", ",", "nonExistingCommonDays"}], "]"}]}]}], 
+        "]"}], "&"}], "/@", "#"}], "&"}], "/@", "goodTSB"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"veryGoodTSA", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"DeleteCases", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"Alternatives", " ", "@@", " ", 
+          RowBox[{"If", "[", 
+           RowBox[{
+            RowBox[{"LeapYearQ", "[", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ",", "1", ",", "1"}], "]"}], "]"}], "]"}], ",", 
+            "nonExistingLeapDays", ",", "nonExistingCommonDays"}], "]"}]}]}], 
+        "]"}], "&"}], "/@", "#"}], "&"}], "/@", "goodTSA"}]}], ";"}]], "Input",\
+
+ CellChangeTimes->{{3.603706830220667*^9, 3.6037068329228373`*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1005, 700},
+WindowMargins->{{268, Automatic}, {Automatic, 121}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 115, 1, 80, "Section"],
+Cell[CellGroupData[{
+Cell[719, 27, 117, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[861, 32, 134, 3, 35, "Subsubsection"],
+Cell[998, 37, 376, 7, 30, "Text"],
+Cell[1377, 46, 1456, 38, 114, "Code"],
+Cell[2836, 86, 1586, 44, 162, "Code"],
+Cell[4425, 132, 1643, 44, 162, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6105, 181, 159, 2, 35, "Subsubsection"],
+Cell[6267, 185, 191, 4, 30, "Text"],
+Cell[6461, 191, 754, 14, 50, "Code"],
+Cell[7218, 207, 583, 16, 50, "Code"],
+Cell[7804, 225, 277, 6, 30, "Text"],
+Cell[8084, 233, 391, 10, 50, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8512, 248, 129, 1, 35, "Subsubsection"],
+Cell[8644, 251, 217, 4, 30, "Text"],
+Cell[8864, 257, 250, 5, 30, "Text"],
+Cell[9117, 264, 983, 25, 66, "Code"],
+Cell[10103, 291, 593, 17, 50, "Code"],
+Cell[10699, 310, 141, 1, 30, "Text"],
+Cell[10843, 313, 378, 9, 50, "Code"],
+Cell[11224, 324, 929, 20, 114, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12190, 349, 135, 1, 35, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[12350, 354, 133, 2, 28, "Input"],
+Cell[12486, 358, 73, 1, 28, "Output"]
+}, Open  ]],
+Cell[12574, 362, 424, 10, 28, "Input"],
+Cell[13001, 374, 314, 8, 28, "Input"],
+Cell[13318, 384, 1108, 35, 46, "Input"],
+Cell[14429, 421, 1194, 39, 46, "Input"],
+Cell[15626, 462, 1177, 34, 50, "Code"],
+Cell[16806, 498, 606, 17, 63, "Input"],
+Cell[17415, 517, 676, 19, 63, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
