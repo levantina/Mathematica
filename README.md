@@ -1,6 +1,6 @@
 # MATHEMATICA AS PROGRAMMING LANGUAGE AND SOFTWARE - Mathematica code, projects and exercises.
 
-These files are a collection of Mathematica 9.0 notebooks: 
+These files are a collection of Mathematica 9.0 notebooks and some pdf version of those notebooks: 
 
 - practice2012: 
 This is a series of solved exercises that I did as a training before attending on July 2013 the Wolfram Science Summer School (WSSS) in Boston (MA).
