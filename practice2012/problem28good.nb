@@ -1,0 +1,137 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3921,        128]
+NotebookOptionsPosition[      3273,        100]
+NotebookOutlinePosition[      3630,        116]
+CellTagsIndexPosition[      3587,        113]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+28. (p.82) Implement the string substitution system \"AAA\"\[Rule]\"ABA\" \
+using StringReplace.\
+\>", "Text"],
+
+Cell["\<\
+Implement the updates so that only the left-most instance gets updated.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"StringSubSystem", "[", 
+   RowBox[{"start_", ",", " ", "rule_", ",", "steps_"}], "]"}], ":=", 
+  RowBox[{"NestList", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"StringReplace", "[", 
+      RowBox[{"#", ",", "rule", ",", "1"}], "]"}], "&"}], ",", "start", ",", 
+    "steps"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.580732090152061*^9, 3.5807322177798843`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StringSubSystem", "[", 
+  RowBox[{"\"\<ABAABCAAA\>\"", ",", 
+   RowBox[{"\"\<AAA\>\"", "\[Rule]", "\"\<ABA\>\""}], ",", "5"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.580732203298253*^9, 3.580732306313765*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"ABAABCAAA\"\>", ",", "\<\"ABAABCABA\"\>", 
+   ",", "\<\"ABAABCABA\"\>", ",", "\<\"ABAABCABA\"\>", 
+   ",", "\<\"ABAABCABA\"\>", ",", "\<\"ABAABCABA\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{{3.580732292913488*^9, 3.580732307858659*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StringSubSystem", "[", 
+  RowBox[{"\"\<ABAABABABABAAABABABAAAABABA\>\"", ",", 
+   RowBox[{"\"\<AAA\>\"", "\[Rule]", "\"\<ABA\>\""}], ",", "5"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.580732800290846*^9, 3.58073283827395*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"ABAABABABABAAABABABAAAABABA\"\>", 
+   ",", "\<\"ABAABABABABABABABABAAAABABA\"\>", 
+   ",", "\<\"ABAABABABABABABABABABAABABA\"\>", 
+   ",", "\<\"ABAABABABABABABABABABAABABA\"\>", 
+   ",", "\<\"ABAABABABABABABABABABAABABA\"\>", 
+   ",", "\<\"ABAABABABABABABABABABAABABA\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.5807328388914547`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StringSubSystem", "[", 
+  RowBox[{"\"\<AAAAAAAAAAAAAAAAAAAAA\>\"", ",", 
+   RowBox[{"\"\<AAA\>\"", "\[Rule]", "\"\<ABA\>\""}], ",", "10"}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.5807328780431023`*^9, 3.5807329354632597`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"AAAAAAAAAAAAAAAAAAAAA\"\>", 
+   ",", "\<\"ABAAAAAAAAAAAAAAAAAAA\"\>", ",", "\<\"ABABAAAAAAAAAAAAAAAAA\"\>",
+    ",", "\<\"ABABABAAAAAAAAAAAAAAA\"\>", 
+   ",", "\<\"ABABABABAAAAAAAAAAAAA\"\>", ",", "\<\"ABABABABABAAAAAAAAAAA\"\>",
+    ",", "\<\"ABABABABABABAAAAAAAAA\"\>", 
+   ",", "\<\"ABABABABABABABAAAAAAA\"\>", ",", "\<\"ABABABABABABABABAAAAA\"\>",
+    ",", "\<\"ABABABABABABABABABAAA\"\>", 
+   ",", "\<\"ABABABABABABABABABABA\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{{3.5807328834620247`*^9, 3.580732936095429*^9}}]
+}, Open  ]]
+},
+WindowSize->{740, 656},
+WindowMargins->{{Automatic, -995}, {Automatic, 26}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 120, 3, 26, "Text"],
+Cell[680, 25, 95, 2, 26, "Text"],
+Cell[778, 29, 398, 10, 43, "Input"],
+Cell[CellGroupData[{
+Cell[1201, 43, 236, 5, 27, "Input"],
+Cell[1440, 50, 283, 5, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1760, 60, 253, 5, 27, "Input"],
+Cell[2016, 67, 381, 8, 43, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2434, 80, 253, 5, 27, "Input"],
+Cell[2690, 87, 567, 10, 73, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

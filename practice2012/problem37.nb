@@ -1,0 +1,135 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      3712,        126]
+NotebookOptionsPosition[      3134,        100]
+NotebookOutlinePosition[      3489,        116]
+CellTagsIndexPosition[      3446,        113]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+    "37.", " ", "Find", " ", "the", " ", "string", " ", "substitution", " ", 
+     "rules", " ", "lhs"}], "\[Rule]", 
+    RowBox[{
+    "rhs", " ", "which", " ", "transforms", " ", "\"\<AAAAAAAA\>\"", " ", 
+     "into", " ", "\"\<BBBBBBAABA\>\"", " ", "by", " ", "repeating", " ", 
+     "the", " ", "following", " ", "10", " ", "times", " ", 
+     RowBox[{"StringReplace", "[", 
+      RowBox[{"#", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"\"\<AB\>\"", "->", "\"\<BAA\>\""}], ",", 
+         RowBox[{"lhs", "\[Rule]", "rhs"}]}], "}"}]}], "]"}]}]}], "&"}], " ", 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.5771946364639397`*^9, 3.577194683075013*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Nest", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StringReplace", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<AB\>\"", "->", "\"\<BAA\>\""}], ",", 
+        RowBox[{"\"\<AA\>\"", "\[Rule]", "\"\<AB\>\""}]}], "}"}]}], "]"}], 
+    "&"}], ",", " ", "\"\<AAAAAAAA\>\"", ",", "10"}], "]"}]], "Input",
+ CellChangeTimes->{{3.5771946099083843`*^9, 3.577194611322276*^9}, {
+  3.577194693870379*^9, 3.577194728067512*^9}}],
+
+Cell[BoxData["\<\"BBBBBAABBBBBAABBBBBAABBBBBAA\"\>"], "Output",
+ CellChangeTimes->{{3.577194719278199*^9, 3.577194728868135*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Nest", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StringReplace", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<AB\>\"", "->", "\"\<BAA\>\""}], ",", 
+        RowBox[{"\"\<AA\>\"", "\[Rule]", "\"\<BA\>\""}]}], "}"}]}], "]"}], 
+    "&"}], ",", " ", "\"\<AAAAAAAA\>\"", ",", "10"}], "]"}]], "Input",
+ CellChangeTimes->{{3.577194759795631*^9, 3.577194778035684*^9}, {
+  3.5771948279344873`*^9, 3.5771948315666122`*^9}}],
+
+Cell[BoxData["\<\"BBBBBBBBBBAABBBBBA\"\>"], "Output",
+ CellChangeTimes->{
+  3.577194778763496*^9, {3.57719482863426*^9, 3.5771948375737886`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Nest", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"StringReplace", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<AB\>\"", "->", "\"\<BAA\>\""}], ",", 
+        RowBox[{"\"\<AAA\>\"", "\[Rule]", "\"\<BA\>\""}]}], "}"}]}], "]"}], 
+    "&"}], ",", " ", "\"\<AAAAAAAA\>\"", ",", "10"}], "]"}]], "Input",
+ CellChangeTimes->{3.577194845744245*^9}],
+
+Cell[BoxData["\<\"BBBBBBAABA\"\>"], "Output",
+ CellChangeTimes->{3.577194846331517*^9}]
+}, Open  ]]
+},
+WindowSize->{740, 656},
+WindowMargins->{{28, Automatic}, {36, Automatic}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 733, 18, 58, "Input"],
+Cell[CellGroupData[{
+Cell[1315, 42, 477, 12, 27, "Input"],
+Cell[1795, 56, 129, 1, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1961, 62, 479, 12, 27, "Input"],
+Cell[2443, 76, 145, 2, 27, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2625, 83, 403, 11, 27, "Input"],
+Cell[3031, 96, 87, 1, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
