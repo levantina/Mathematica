@@ -26,5 +26,7 @@ WIKIPEDIA NETWORK: createNetwork.nb -> It builds the Wikipedia sub-graph startin
 PROJECT: projectComplete -> All the functions, code lines, graphics, data manipulations for developing the project, in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
 
 - Thesis:
-Useful code for the initial data gathering for my Master’s Thesis, basically a further development of the WSSS Project described above.
+Useful code for the initial data gathering for my Master’s Thesis.
+
+built_graph.nb and extract_pop.nb ->  These are two Mathematica notebooks, a further development of the WSSS Project described above.
 
