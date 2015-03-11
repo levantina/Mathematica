@@ -1,0 +1,1138 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     39176,       1129]
+NotebookOptionsPosition[     36057,       1024]
+NotebookOutlinePosition[     36413,       1040]
+CellTagsIndexPosition[     36370,       1037]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+How Does Popularity Diffuse in a Wikipedia Sub-Graph?\
+\>", "Title",
+ CellChangeTimes->{{3.582582218435177*^9, 3.582582253362135*^9}, {
+  3.582585529304776*^9, 3.582585533825951*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["The Wikigraph", "Section",
+ CellChangeTimes->{{3.582581534093862*^9, 3.582581566532091*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Starting from an initial Wikipedia Page, this group of functions built the \
+weighted graph of depth 2 (we consider only links with multiplicity > 1). \
+Multiplicity is our weight.\
+\>", "Subsection",
+ CellChangeTimes->{{3.582565641214691*^9, 3.582565751019946*^9}, {
+  3.582571688199428*^9, 3.582571700284142*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Built the Graph", "Subsubsection",
+ CellChangeTimes->{{3.5825817769926853`*^9, 3.582581800525676*^9}, 
+   3.5825818711620073`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"initialTitle", "=", " ", "\"\<Star_Trek_Into_Darkness\>\""}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.582561605775977*^9, 3.582561628114563*^9}, {
+  3.582562878470759*^9, 3.582562879781994*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Needs", "[", "\"\<GraphUtilities`\>\"", "]"}]], "Input"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"cleanlinks", "[", "links_", "]"}], " ", ":=", " ", 
+  RowBox[{"Module", "[", "\n", "\t", 
+   RowBox[{
+    RowBox[{"{", "cleanedlinks", "}"}], ",", "\n", "\t", 
+    RowBox[{
+     RowBox[{"cleanedlinks", " ", "=", " ", 
+      RowBox[{"Select", "[", "\n", "\t\t", 
+       RowBox[{"links", ",", "\n", "\t\t", 
+        RowBox[{
+         RowBox[{"StringMatchQ", "[", 
+          RowBox[{"#", ",", " ", 
+           RowBox[{"\"\<http://en.wikipedia.org/wiki/\>\"", "~~", 
+            RowBox[{
+             RowBox[{"Except", "[", "\"\<:\>\"", "]"}], ".."}]}]}], "]"}], 
+         " ", "&"}]}], "\n", "\t", "]"}]}], ";", "\n", "\t", 
+     RowBox[{"cleanedlinks", " ", "=", " ", 
+      RowBox[{"Select", "[", " ", 
+       RowBox[{
+        RowBox[{"Gather", "[", 
+         RowBox[{"DeleteCases", "[", 
+          RowBox[{
+          "cleanedlinks", ",", 
+           "\"\<http://en.wikipedia.org/wiki/Main_Page\>\""}], "]"}], "]"}], 
+        ",", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Length", "[", "#", "]"}], " ", ">", " ", "1"}], " ", 
+         "&"}]}], "]"}]}], ";", "\n", "\t", 
+     RowBox[{"Tally", "@", 
+      RowBox[{"Flatten", "[", "cleanedlinks", "]"}]}]}]}], "\n", "\t", 
+   RowBox[{"(*", 
+    RowBox[{"First", " ", "/@", " ", "cleanedlinks"}], "*)"}], "\n", 
+   "]"}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "this", " ", "function", " ", "will", " ", "consider", " ", "links", " ", 
+    "multiplicity", " ", "and", " ", "links", " ", "with", " ", "at", " ", 
+    "least", " ", "2", " ", "repetitions"}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582499717022997*^9, 3.582499873086062*^9}, {
+  3.582499913772024*^9, 3.582499915876026*^9}, {3.582499967150619*^9, 
+  3.5824999716333427`*^9}, {3.5825026435040894`*^9, 3.582502650904758*^9}, {
+  3.582502863258078*^9, 3.58250288959753*^9}, {3.5825629148044*^9, 
+  3.5825629334146643`*^9}, {3.582563260077615*^9, 3.582563285784018*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"importFirstLevelLinks", "[", "init_", "]"}], ":=", " ", 
+  RowBox[{"cleanlinks", " ", "@", " ", "\n", "\t", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{"\"\<http://en.wikipedia.org/wiki/\>\"", "<>", "init"}], ",", 
+     " ", "\"\<Hyperlinks\>\""}], "]"}]}]}], "\n", 
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "this", " ", "output", " ", "is", " ", "a", " ", "list", " ", "of", " ", 
+    "weighted", " ", "links", " ", "with", " ", "their", " ", 
+    "multiplicity"}], " ", "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582562513803823*^9, 3.582562575739441*^9}, {
+   3.582562670010065*^9, 3.582562737445911*^9}, 3.582562913379315*^9, {
+   3.582563354835919*^9, 3.582563372408746*^9}, {3.5825658987666187`*^9, 
+   3.5825659225006638`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createFirstLevelWeightedEdges", "[", 
+   RowBox[{"init_", ",", "weightedlinks_"}], "]"}], ":=", "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"init", ",", 
+      RowBox[{"Last", "@", 
+       RowBox[{"StringSplit", "[", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], ",", "\"\</\>\""}], "]"}]}], ",", 
+      RowBox[{"#", "[", 
+       RowBox[{"[", "2", "]"}], "]"}]}], "}"}], "&"}], " ", "/@", " ", 
+   "weightedlinks"}]}]], "Code",
+ CellChangeTimes->{{3.58256279692735*^9, 3.582562893001288*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"findFirstNeighbors", "[", "firstLevelLinks_", "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Last", "@", 
+     RowBox[{"StringSplit", "[", 
+      RowBox[{"#", ",", "\"\</\>\""}], "]"}]}], "&"}], " ", "/@", 
+   RowBox[{"firstLevelLinks", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "1"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.5825629873078623`*^9, 3.5825629945717297`*^9}, {
+  3.582563060512906*^9, 3.582563097967441*^9}, {3.582564686941228*^9, 
+  3.58256468895494*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"importSecondLevelLinks", "[", "firstLevelLinks_", "]"}], ":=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"cleanlinks", " ", "@", " ", 
+      RowBox[{"Import", "[", 
+       RowBox[{"#", ",", "\"\<Hyperlinks\>\""}], "]"}]}], ")"}], "&"}], " ", "/@",
+    " ", 
+   RowBox[{"firstLevelLinks", "[", 
+    RowBox[{"[", 
+     RowBox[{"All", ",", "1"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582563146588324*^9, 3.582563202096096*^9}, {
+  3.582563464818244*^9, 3.582563483504982*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createSecondLevelWeightedEdges", "[", 
+   RowBox[{"firstNeighbors_", ",", "secondLevelLinks_"}], "]"}], ":=", "\n", 
+  "\t", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"secondNeighbors", ",", "secondNeighborsWeighted"}], "}"}], ",", 
+    "\[IndentingNewLine]", "\t\t", 
+    RowBox[{
+     RowBox[{"secondNeighbors", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"Last", "[", 
+          RowBox[{"StringSplit", "[", 
+           RowBox[{"#", ",", "\"\</\>\""}], "]"}], "]"}], "&"}], ",", 
+        RowBox[{"secondLevelLinks", "[", 
+         RowBox[{"[", 
+          RowBox[{"All", ",", "All", ",", "1"}], "]"}], "]"}], ",", 
+        RowBox[{"{", "2", "}"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     "\t\t", 
+     RowBox[{"secondNeighborsWeighted", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"secondNeighbors", "[", 
+            RowBox[{"[", "#", "]"}], "]"}], ",", 
+           RowBox[{"secondLevelLinks", "[", 
+            RowBox[{"[", 
+             RowBox[{"#", ",", "All", ",", "2"}], "]"}], "]"}]}], "}"}], 
+         "]"}], "&"}], " ", "/@", " ", 
+       RowBox[{"Range", "[", 
+        RowBox[{"1", ",", 
+         RowBox[{"Length", "[", "secondNeighbors", "]"}]}], "]"}]}]}], ";", 
+     "\[IndentingNewLine]", "\t\t", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"Outer", "[", "\n", "\t\t\t", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"Flatten", "[", 
+             RowBox[{"{", 
+              RowBox[{"#1", ",", "#2"}], "}"}], "]"}], "&"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"firstNeighbors", "[", 
+             RowBox[{"[", "#", "]"}], "]"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"secondNeighborsWeighted", "[", 
+             RowBox[{"[", "#", "]"}], "]"}], "}"}], ",", "2"}], "]"}], "&"}], 
+        " ", "/@", " ", 
+        RowBox[{"Range", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"Length", "[", "firstNeighbors", "]"}]}], "]"}]}], ",", 
+       "3"}], "]"}]}]}], " ", "\[IndentingNewLine]", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582564642414177*^9, 3.582564674299406*^9}, {
+  3.582564723176594*^9, 3.582564739662262*^9}, {3.582564843521192*^9, 
+  3.582564867235384*^9}, {3.582564905864854*^9, 3.5825649286034107`*^9}, {
+  3.5825650195699883`*^9, 3.582565041100698*^9}, {3.582565081770095*^9, 
+  3.582565115009295*^9}, {3.582565168387762*^9, 3.582565298833727*^9}, {
+  3.5825654676214037`*^9, 3.582565496177476*^9}, {3.582565599702738*^9, 
+  3.582565619611217*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"createTheGraph", "[", "init_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"firstLevel", ",", "secondLevel"}], "}"}], ",", "\n", 
+    RowBox[{
+     RowBox[{"firstLevel", "=", 
+      RowBox[{"importFirstLevelLinks", "[", "init", "]"}]}], ";", "\n", 
+     RowBox[{"secondLevel", "=", 
+      RowBox[{"importSecondLevelLinks", "[", "firstLevel", "]"}]}], ";", "\n", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"createFirstLevelWeightedEdges", "[", 
+          RowBox[{"init", ",", "firstLevel"}], "]"}], ",", 
+         RowBox[{"createSecondLevelWeightedEdges", "[", 
+          RowBox[{
+           RowBox[{"findFirstNeighbors", "[", "firstLevel", "]"}], ",", 
+           "secondLevel"}], "]"}]}], "}"}], ",", "1"}], "]"}]}]}], "\n", "\n",
+    "\n", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582565779343565*^9, 3.582565881071094*^9}, {
+  3.582565927873314*^9, 3.582566163392541*^9}, {3.582566360880218*^9, 
+  3.582566385234556*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Remove Self Loops", "Subsubsection",
+ CellChangeTimes->{{3.582581632199626*^9, 3.582581644100657*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NoSelfLoopGraph", "[", "EdgesList_", "]"}], ":=", " ", 
+  RowBox[{"DeleteCases", "[", 
+   RowBox[{"EdgesList", ",", 
+    RowBox[{"{", 
+     RowBox[{"a_", ",", "a_", ",", "__"}], "}"}]}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582571592092113*^9, 3.582571633191206*^9}, 
+   3.582573236980083*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Correct Multiplicity: remove Multi Edges and update Weights\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.5825768858645773`*^9, 3.58257690402143*^9}, {
+  3.582577109626791*^9, 3.582577121190824*^9}, {3.58258164934122*^9, 
+  3.582581666692767*^9}, {3.5825818745899057`*^9, 3.582581903252935*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NewGraphWithCorrectMultiplicity", "[", "Edges_", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "unweighted", ",", "repetitions", ",", "positions", ",", "\n", 
+      "replaceIndices", ",", "deleteIndices", ",", "updates", ",", "subs", 
+      ",", "checkedFirst", ",", "checkedFinal"}], "}"}], ",", "\n", 
+    RowBox[{
+     RowBox[{"unweighted", "=", 
+      RowBox[{"Edges", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", 
+         RowBox[{";;", "2"}]}], "]"}], "]"}]}], ";", "\n", 
+     RowBox[{"repetitions", "=", 
+      RowBox[{"Select", "[", 
+       RowBox[{
+        RowBox[{"Tally", "[", "unweighted", "]"}], ",", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "2", "]"}], "]"}], ">", "1"}], ")"}], "&"}]}], 
+       "]"}]}], ";", "\n", 
+     RowBox[{"positions", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Position", "[", 
+         RowBox[{"unweighted", ",", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", 
+            RowBox[{";;", "2"}], "]"}], "]"}]}], "]"}], "&"}], "@@@", " ", 
+       "repetitions"}]}], ";", "\n", 
+     RowBox[{"replaceIndices", "=", 
+      RowBox[{"positions", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", "1"}], "]"}], "]"}]}], ";", "\n", 
+     RowBox[{"deleteIndices", "=", 
+      RowBox[{"positions", "[", 
+       RowBox[{"[", 
+        RowBox[{"All", ",", "2"}], "]"}], "]"}]}], ";", "\n", 
+     RowBox[{"updates", "=", 
+      RowBox[{"Partition", "[", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Edges", "[", 
+              RowBox[{"[", 
+               RowBox[{
+                RowBox[{"#1", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], ",", 
+                RowBox[{";;", "2"}]}], "]"}], "]"}], ",", 
+             RowBox[{
+              RowBox[{"Edges", "[", 
+               RowBox[{"[", 
+                RowBox[{
+                 RowBox[{"#1", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", "3"}], "]"}], "]"}], 
+              "+", 
+              RowBox[{"Edges", "[", 
+               RowBox[{"[", 
+                RowBox[{
+                 RowBox[{"#1", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}], ",", "3"}], "]"}], 
+               "]"}]}]}], "}"}], "&"}], "/@", " ", "positions"}], "]"}], ",", 
+        "3"}], "]"}]}], ";", "\n", 
+     RowBox[{"subs", "=", 
+      RowBox[{"Map", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"#1", "[", 
+           RowBox[{"[", 
+            RowBox[{"1", ",", "1"}], "]"}], "]"}], "\[Rule]", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "  ", ",", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{"replaceIndices", ",", "updates"}], "}"}], "]"}]}], "]"}]}],
+      ";", "\n", 
+     RowBox[{"checkedFirst", "=", 
+      RowBox[{"ReplacePart", "[", 
+       RowBox[{"Edges", ",", "subs"}], "]"}]}], ";", "\n", 
+     RowBox[{"checkedFinal", "=", 
+      RowBox[{"Delete", "[", 
+       RowBox[{"checkedFirst", ",", "deleteIndices"}], "]"}]}]}]}], "\n", 
+   "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+     "this", " ", "function", " ", "controls", " ", "and", " ", "corrects", 
+      " ", "repetitions", " ", "in", " ", "the", " ", "graph"}], ",", " ", 
+     RowBox[{"just", " ", "use", " ", "it", " ", "once"}]}], "*)"}], "\n", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.582576915908737*^9, 3.582576992591934*^9}, {
+  3.582577074037278*^9, 3.58257710257574*^9}, {3.582577204982039*^9, 
+  3.5825772062541323`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Operations on the Graph", "Subsection",
+ CellChangeTimes->{{3.582581695008811*^9, 3.582581726541403*^9}, 
+   3.5825819109861317`*^9}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Static visualization with Weights or Ranks\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.582571829300068*^9, 3.582571844054262*^9}, {
+   3.582571964307878*^9, 3.582571973197179*^9}, {3.5825817326534433`*^9, 
+   3.5825817461735*^9}, 3.582581913678048*^9}],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{
+   RowBox[{"FancyRankingGraph", "[", 
+    RowBox[{"list_", ",", "ranks_", ",", "title_", ",", "center_"}], "]"}], ":=",
+    "\n", "\t", 
+   RowBox[{"Graph", "[", 
+    RowBox[{
+     RowBox[{"DirectedEdge", "@@@", " ", "list"}], ",", "\n", "\t\t", 
+     RowBox[{"VertexSize", "\[Rule]", "ranks"}], ",", 
+     RowBox[{"GraphHighlight", "\[Rule]", 
+      RowBox[{"{", "center", "}"}]}], ",", "\n", "\t\t", 
+     RowBox[{"PlotLabel", "\[Rule]", 
+      RowBox[{"Framed", "[", 
+       RowBox[{
+        RowBox[{"Style", "[", 
+         RowBox[{"title", ",", "15", ",", "\"\<Arial\>\""}], "]"}], ",", "\n",
+         "\t\t", 
+        RowBox[{"Background", "\[Rule]", "LightBlue"}]}], "]"}]}], ",", 
+     RowBox[{"VertexSize", "\[Rule]", "1"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "700"}], ",", 
+     RowBox[{"GraphLayout", "\[Rule]", "\"\<SpringElectricalEmbedding\>\""}], 
+     ",", "\n", "\t\t", 
+     RowBox[{"VertexLabels", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"center", "\[Rule]", 
+        RowBox[{"Framed", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{"center", ",", "15", ",", "\"\<Arial\>\""}], "]"}], ",", 
+          RowBox[{"Background", "\[Rule]", "White"}]}], "]"}]}], "}"}]}]}], 
+    "\n", "]"}]}],
+  FontWeight->"Bold"]], "Code",
+ CellChangeTimes->{{3.5821321777897167`*^9, 3.5821323428868723`*^9}, 
+   3.582132470694993*^9, {3.582133170947474*^9, 3.58213320443248*^9}},
+ FontWeight->"Plain"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"NormRankings", "[", "rankings_", "]"}], ":=", "\n", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"mean", "=", 
+      RowBox[{"Mean", "[", 
+       RowBox[{"rankings", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "2"}], "]"}], "]"}], "]"}]}], "}"}], ",", "\n", 
+    "\n", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"#", "\[Rule]", 
+        RowBox[{"N", "[", 
+         RowBox[{"#2", "/", "mean"}], "]"}]}], "&"}], " ", "@@@", " ", 
+      "rankings"}], ")"}]}], "\n", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582577760863595*^9, 3.582577819074534*^9}, {
+  3.582577945079287*^9, 3.582578074399089*^9}, {3.582578123945736*^9, 
+  3.582578281376845*^9}, {3.58257837334558*^9, 3.5825783936395807`*^9}, {
+  3.5825784847225103`*^9, 3.582578494474612*^9}, {3.5825786010973463`*^9, 
+  3.582578644584836*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Dynamic visualization with Popularity\
+\>", "Subsubsection",
+ CellChangeTimes->{{3.582579814491387*^9, 3.5825798436566067`*^9}, {
+   3.582581750508285*^9, 3.5825817629491262`*^9}, 3.58258191676125*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"AssignDynamicWeights", "[", 
+   RowBox[{"Vertices_", ",", "TimeSeries_"}], "]"}], ":=", "\n", "\t", 
+  RowBox[{"MapThread", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"#1", " ", "\[Rule]", " ", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"#2", "[", 
+        RowBox[{"[", 
+         RowBox[{"All", ",", "All", ",", "2"}], "]"}], "]"}], "]"}]}], " ", 
+     "&"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"Vertices", ",", "TimeSeries"}], "}"}]}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582318513706889*^9, 3.5823186866604567`*^9}, {
+  3.582318769220552*^9, 3.582318832489666*^9}, {3.582319151780217*^9, 
+  3.58231919787726*^9}, {3.582581394621912*^9, 3.582581420328004*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{
+   RowBox[{"PopWeightedGraph", "[", 
+    RowBox[{"list_", ",", "weights_", ",", "title_", ",", "center_"}], "]"}], 
+   ":=", 
+   RowBox[{"Graph", "[", 
+    RowBox[{
+     RowBox[{"DirectedEdge", "@@@", " ", "list"}], ",", "\n", 
+     RowBox[{"VertexSize", "\[Rule]", "weights"}], ",", 
+     RowBox[{"GraphHighlight", "\[Rule]", 
+      RowBox[{"{", "center", "}"}]}], ",", "\n", 
+     RowBox[{"PlotLabel", "\[Rule]", 
+      RowBox[{"Framed", "[", 
+       RowBox[{
+        RowBox[{"Style", "[", 
+         RowBox[{"title", ",", "15", ",", "\"\<Arial\>\""}], "]"}], ",", "\n", 
+        RowBox[{"Background", "\[Rule]", "LightBlue"}]}], "]"}]}], ",", 
+     RowBox[{"VertexSize", "\[Rule]", "1"}], ",", 
+     RowBox[{"ImageSize", "\[Rule]", "700"}], ",", 
+     RowBox[{"GraphLayout", "\[Rule]", "\"\<SpringElectricalEmbedding\>\""}], 
+     ",", "\n", 
+     RowBox[{"VertexLabels", "\[Rule]", 
+      RowBox[{"{", 
+       RowBox[{"center", "\[Rule]", 
+        RowBox[{"Framed", "[", 
+         RowBox[{
+          RowBox[{"Style", "[", 
+           RowBox[{"center", ",", "15", ",", "\"\<Arial\>\""}], "]"}], ",", 
+          RowBox[{"Background", "\[Rule]", "White"}]}], "]"}]}], "}"}]}]}], 
+    "]"}]}],
+  FontWeight->"Bold"]], "Code",
+ CellChangeTimes->{{3.582319296181808*^9, 3.582319335931477*^9}, {
+  3.582321820361166*^9, 3.582321820961297*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DynamicPopularity", "[", 
+   RowBox[{"Edges_", ",", "popweights_"}], "]"}], ":=", 
+  RowBox[{"Manipulate", "[", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"With", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"mean", " ", "=", " ", 
+        RowBox[{"Mean", "[", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"popweights", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", " ", "2"}], "]"}], "]"}], "]"}], "]"}]}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"PopWeightedGraph", "[", 
+       RowBox[{"Edges", ",", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#1", "\[Rule]", 
+           RowBox[{"N", "[", 
+            RowBox[{
+             RowBox[{"#2", "[", 
+              RowBox[{"[", "w", "]"}], "]"}], "/", " ", "mean"}], "]"}]}], 
+          "&"}], "@@@", " ", "popweights"}], "\[IndentingNewLine]", ",", 
+        "\"\<Avatar, popularity\>\"", ",", "\"\<Avatar_%282009_film%29\>\""}],
+        "]"}]}], "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"w", ",", "1"}], "}"}], ",", "1", ",", " ", 
+      RowBox[{"Length", "[", 
+       RowBox[{"popweights", "[", 
+        RowBox[{"[", 
+         RowBox[{"1", ",", "2"}], "]"}], "]"}], "]"}], ",", " ", "1"}], 
+     "}"}]}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.5825812272388372`*^9, 3.5825812369755573`*^9}, {
+  3.5825812893305883`*^9, 3.5825813112345457`*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Popularity Time Series", "Section",
+ CellChangeTimes->{{3.582579040981378*^9, 3.5825790474528303`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Extract Time Series for a set of Wikipedia Pages\
+\>", "Subsection",
+ CellChangeTimes->{{3.582579073112069*^9, 3.582579100341235*^9}, {
+  3.58258186337818*^9, 3.582581865068943*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Where? http : // stats.grok.se/json/en/\
+\>", "Subsubsection",
+ CellChangeTimes->{
+  3.5825801797382717`*^9, {3.582582036746708*^9, 3.582582038702242*^9}}],
+
+Cell["\<\
+Given a list of Titles of Wikipedia Pages this function extract the time \
+series for the chosen dates (in months), and print the results on a json file.\
+\>", "Text",
+ CellChangeTimes->{{3.582579403868819*^9, 3.5825794677667418`*^9}, {
+  3.582579517031558*^9, 3.582579519327544*^9}, {3.5825820527100697`*^9, 
+  3.5825820533743067`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"importingOnFile", "[", 
+    RowBox[{"dates_List", ",", "pages_", ",", "outputfile_"}], "]"}], ":=", 
+   "\n", 
+   RowBox[{"Do", "[", "\n", "\t", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"Import", "[", 
+          RowBox[{
+           RowBox[{
+           "\"\<http://stats.grok.se/json/en/\>\"", "<>", "#1", "<>", 
+            "\"\</\>\"", "<>", 
+            RowBox[{"pages", "[", 
+             RowBox[{"[", "i", "]"}], "]"}]}], ",", " ", "\"\<JSON\>\""}], 
+          "]"}], ">>>", "\n", "\t\t", 
+         RowBox[{
+         "\"\</Users/Levantina/Documents/WOLFRAM/PROJECT/Timeseries/\>\"", "<>",
+           "outputfile"}]}], ")"}], " ", "&"}], " ", "/@", " ", "dates"}], 
+     "\n", "\t", ",", "\n", "\t", 
+     RowBox[{"{", 
+      RowBox[{"i", ",", 
+       RowBox[{"Length", "[", "pages", "]"}]}], "}"}]}], "]"}]}], 
+  "\n"}], "\n", 
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"dates_List", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<200910\>\"", ",", "\"\<200911\>\"", ",", "\"\<200910\>\"", ",", 
+        ".."}], "}"}], " ", "in", " ", "months"}]}], ",", " ", 
+    RowBox[{"in", " ", "crescent", " ", "order"}], ",", " ", 
+    RowBox[{"pages", " ", "=", " ", 
+     RowBox[{"list", " ", "of", " ", "vertexes"}]}], ",", " ", 
+    RowBox[{"outputfile", "=", " ", "\"\<name.format\>\""}]}], " ", 
+   "*)"}]}]}], "Code",
+ CellChangeTimes->{{3.582313909067574*^9, 3.582313915005131*^9}, {
+   3.582314305314431*^9, 3.5823143365311747`*^9}, {3.5823144238511877`*^9, 
+   3.582314522363283*^9}, {3.582314594225692*^9, 3.582314660406973*^9}, {
+   3.5823147228346157`*^9, 3.582314725781582*^9}, 3.5823148233868856`*^9, {
+   3.5825792207774963`*^9, 3.5825792280393353`*^9}, {3.582580023096035*^9, 
+   3.582580038795842*^9}, {3.582580195630447*^9, 3.5825802331045017`*^9}, {
+   3.5825820786808653`*^9, 3.582582084580583*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Process and Plot Time Series", "Subsubsection",
+ CellChangeTimes->{{3.582582129239728*^9, 3.582582139277193*^9}}],
+
+Cell["\<\
+This function read from file the time series, knowing how many months.\
+\>", "Text",
+ CellChangeTimes->{{3.5825794942416687`*^9, 3.5825795241275806`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"readingTimeSeries", "[", 
+   RowBox[{"file_", ",", "months_"}], "]"}], ":=", 
+  RowBox[{"ReadList", "[", 
+   RowBox[{
+   "\"\</Users/Levantina/Documents/WOLFRAM/PROJECT/Timeseries/\>\"", "<>", 
+    "file"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582314990115505*^9, 3.582315030921545*^9}, {
+   3.58231507370012*^9, 3.582315074406612*^9}, {3.582315115805582*^9, 
+   3.58231513536471*^9}, {3.582315186103466*^9, 3.582315189100485*^9}, {
+   3.5823155500336533`*^9, 3.5823155776440887`*^9}, {3.582316388307046*^9, 
+   3.5823163889620867`*^9}, 3.5824004842210627`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CleanTimeSeries", "[", "series_", "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"FromDigits", " ", "/@", " ", 
+       RowBox[{"StringSplit", "[", 
+        RowBox[{"#", ",", "\"\<-\>\""}], "]"}]}], ",", "#2"}], "}"}], "&"}], 
+   " ", "@@@", " ", 
+   RowBox[{"series", "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "2"}], "]"}], "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582300005949795*^9, 3.582300046452704*^9}, {
+  3.582300129797895*^9, 3.582300141014222*^9}, {3.582300607646852*^9, 
+  3.582300608914565*^9}}],
+
+Cell["\<\
+This function cleans imported data and makes them ready to be plotted.\
+\>", "Text",
+ CellChangeTimes->{{3.582579539303482*^9, 3.582579590584704*^9}, {
+  3.5825797013324013`*^9, 3.582579747380018*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ExtractTimeSeries", "[", 
+   RowBox[{"imported_List", ",", "Nmonths_Integer"}], "]"}], ":=", 
+  RowBox[{"Partition", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"CleanTimeSeries", "[", "#", "]"}], "&"}], " ", "/@", " ", 
+     "imported"}], ",", "Nmonths"}], "]"}]}]], "Code",
+ CellChangeTimes->{{3.582316410393211*^9, 3.582316502527009*^9}}],
+
+Cell["\<\
+This function is useful to study the average behaviour of a random sample of \
+pages.\
+\>", "Text",
+ CellChangeTimes->{{3.5825807546938047`*^9, 3.582580788276102*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"averageTimeSeries", "[", "cleanedTS_", "]"}], ":=", 
+  RowBox[{"N", "@", 
+   RowBox[{"Mean", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Flatten", "[", 
+       RowBox[{"cleanedTS", "[", 
+        RowBox[{"[", 
+         RowBox[{"#", ",", "All", ",", "All", ",", "2"}], "]"}], "]"}], "]"}],
+       "&"}], " ", "/@", " ", 
+     RowBox[{"Range", "[", 
+      RowBox[{"1", ",", 
+       RowBox[{"Length", "[", "cleanedTS", "]"}]}], "]"}]}], 
+    "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.582580637704607*^9, 3.5825806860081663`*^9}}],
+
+Cell["\<\
+This function plots the popularity for the selected Vertex:\
+\>", "Text",
+ CellChangeTimes->{{3.582579359812401*^9, 3.582579396079618*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PlotTimeSeries", "[", 
+   RowBox[{"series_", ",", "opts___"}], "]"}], ":=", " ", 
+  RowBox[{"DateListPlot", "[", 
+   RowBox[{"series", ",", 
+    RowBox[{"Joined", " ", "\[Rule]", "True"}], ",", "opts"}], 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.5823001148601713`*^9, 3.58230016471362*^9}, {
+  3.582300433263279*^9, 3.5823004437188683`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ShowTimeSeries", "[", 
+   RowBox[{
+   "index_", ",", "vertices_", ",", "imported_List", ",", "Nmonths_Integer"}],
+    "]"}], ":=", " ", "\n", "\t", 
+  RowBox[{"PlotTimeSeries", "[", "\n", "\t\t", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ExtractTimeSeries", "[", 
+      RowBox[{"imported", ",", "Nmonths"}], "]"}], "[", 
+     RowBox[{"[", "index", "]"}], "]"}], ",", "\n", "\t\t\t", 
+    RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+    RowBox[{"PlotLabel", "\[Rule]", 
+     RowBox[{"vertices", "[", 
+      RowBox[{"[", "index", "]"}], "\n", "\t\t", "]"}]}]}], "\n", "\t", 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.582316333907489*^9, 3.5823163815002623`*^9}, {
+  3.582316489684134*^9, 3.582316512404997*^9}, {3.5823165489254837`*^9, 
+  3.582316675336319*^9}, {3.582316729178678*^9, 3.5823167330180387`*^9}, {
+  3.5823170842251673`*^9, 3.5823171081732407`*^9}}],
+
+Cell["\<\
+This function correct the weekly fluctuation effect:\
+\>", "Text",
+ CellChangeTimes->{{3.582910200254609*^9, 3.582910217204021*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Corrections", "[", 
+    RowBox[{"daily_", ",", "timeseries_"}], "]"}], ":=", "\n", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"#", "/", 
+       RowBox[{
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Table", "[", 
+          RowBox[{"daily", ",", 
+           RowBox[{"{", "9", "}"}]}], "]"}], "]"}], "[", 
+        RowBox[{"[", 
+         RowBox[{";;", 
+          RowBox[{"Length", "[", "#", "]"}]}], "]"}], "]"}]}], " ", "&"}], 
+     ",", " ", "timeseries", ",", 
+     RowBox[{"{", "1", "}"}]}], "]"}]}], "\n"}]], "Code",
+ CellChangeTimes->{{3.5826640301582003`*^9, 3.582664084566702*^9}, {
+  3.582664157863698*^9, 3.58266419811799*^9}, {3.582664831856213*^9, 
+  3.58266486238128*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"ex", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+    "\"\</Users/Levantina/Documents/WOLFRAM/PROJECT/startrekNetwork/\
+allStarTrekWeighted.tsv\>\"", ",", "\"\<TSV\>\""}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.5825770149480743`*^9, 3.582577025066185*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Length", "[", 
+  RowBox[{"NewGraphWithCorrectMultiplicity", "[", "ex", "]"}], "]"}]], "Input",\
+
+ CellChangeTimes->{{3.582577032335182*^9, 3.582577058962717*^9}}],
+
+Cell[BoxData["3126"], "Output",
+ CellChangeTimes->{{3.5825770392995577`*^9, 3.582577059448121*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Correlations between Time Series\
+\>", "Subsection",
+ CellChangeTimes->{{3.5827187162416363`*^9, 3.582718729497779*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"FastCorrelations", "[", "timeseries_", "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"matrix", "=", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"If", "[", "\n", "\t", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"StandardDeviation", "[", "#", "]"}], ">", "0"}], ",", 
+          RowBox[{"N", "[", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"#", "-", 
+              RowBox[{"Mean", "[", "#", "]"}]}], ")"}], "/", 
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"StandardDeviation", "[", "#", "]"}], "*", 
+              RowBox[{"Sqrt", "[", 
+               RowBox[{"Length", "[", "#", "]"}], "]"}]}], ")"}]}], "]"}], 
+          ",", "\n", "\t", 
+          RowBox[{"Table", "[", 
+           RowBox[{"0.", ",", 
+            RowBox[{"{", 
+             RowBox[{"Length", "[", "#", "]"}], "}"}]}], "]"}]}], "]"}], 
+        "&"}], "/@", "timeseries"}]}], "}"}], ",", "\n", "    ", 
+    RowBox[{"matrix", ".", 
+     RowBox[{"Transpose", "[", "matrix", "]"}]}]}], "\n", "]"}]}]], "Code",
+ CellChangeTimes->{{3.582669099174191*^9, 3.582669306109169*^9}}],
+
+Cell["\<\
+We can transform the correlation in a distance in the graph:
+d(i,j) = Sqrt[2*(1-corr(i,j))]
+d= {0 correlated, Sqrt[2] not correlated, 2 anticorrelated}\
+\>", "Text",
+ CellChangeTimes->{{3.582718825687029*^9, 3.582718960264615*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DistancesFromCorrelationMatrix", "[", "matrix_", "]"}], ":=", " ", 
+  
+  RowBox[{
+   RowBox[{
+    RowBox[{"Sqrt", "[", 
+     RowBox[{"2", "*", 
+      RowBox[{"(", 
+       RowBox[{"1", "-", "#"}], ")"}]}], "]"}], " ", "&"}], " ", "/@", " ", 
+   "matrix"}]}]], "Code",
+ CellChangeTimes->{{3.5827189696920843`*^9, 3.582719033708853*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Adjacency Matrix ", "Subsubsection",
+ CellChangeTimes->{{3.5828508324286013`*^9, 3.582850842809472*^9}}],
+
+Cell["\<\
+To put 0 s on the diagonal (for Array Plot)\
+\>", "Text",
+ CellChangeTimes->{{3.582850887060334*^9, 3.5828509046260643`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"removingSelfLoops", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"-", "1"}], ")"}], "*", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"IdentityMatrix", "[", "65", "]"}], "-", "1"}], ")"}]}]}], 
+  ";"}]], "Code",
+ CellChangeTimes->{3.582850849342041*^9}],
+
+Cell["\<\
+To visulaize with the function Graph, to put Infinity to disconnect vertices\
+\>", "Text",
+ CellChangeTimes->{{3.582850867548579*^9, 3.58285087452195*^9}, {
+  3.5828509069381866`*^9, 3.582850917194132*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"InfiniteDiagonal", "=", 
+   RowBox[{"Map", "[", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"#", "\[Equal]", "1"}], ",", "Infinity", ",", "1"}], "]"}], 
+      "&"}], " ", ",", 
+     RowBox[{"IdentityMatrix", "[", "65", "]"}], ",", 
+     RowBox[{"{", "2", "}"}]}], "]"}]}], ";"}]], "Code",
+ CellChangeTimes->{3.5828508629522533`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Link Prediction", "Subsection",
+ CellChangeTimes->{{3.582855215541877*^9, 3.5828552195871*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LinkPrediction", "[", 
+   RowBox[{
+   "d_", ",", "popi_", ",", "popj_", ",", "DistThreshold_", ",", 
+    "PopThreshold_"}], "]"}], ":=", " ", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"d", ">", "DistThreshold"}], ",", "\n", 
+    RowBox[{"d", "*", 
+     RowBox[{"Sqrt", "[", 
+      RowBox[{"popi", "*", "popj"}], "]"}]}], ",", "\n", 
+    RowBox[{"If", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"popi", "*", "popj"}], ">", "PopThreshold"}], ",", 
+      RowBox[{"d", "*", 
+       RowBox[{"Sqrt", "[", 
+        RowBox[{"popi", "*", "popj"}], "]"}]}], ",", "0"}], "]"}]}], 
+   "]"}]}]], "Code",
+ CellChangeTimes->{{3.582847293715024*^9, 3.582847405911313*^9}, {
+   3.582847472021864*^9, 3.582847475777371*^9}, {3.5828475570896606`*^9, 
+   3.582847574134306*^9}, {3.582848065963478*^9, 3.582848068441489*^9}, {
+   3.5828481055181303`*^9, 3.582848156613977*^9}, 3.582848250853092*^9, {
+   3.58284836195496*^9, 3.582848370774353*^9}, {3.5828484961863747`*^9, 
+   3.5828485460670347`*^9}, {3.582849022711133*^9, 3.582849061937502*^9}, {
+   3.582850216899556*^9, 3.582850267316434*^9}, 3.5828511069169207`*^9, {
+   3.582851886812921*^9, 3.5828519095905237`*^9}, {3.582853742599971*^9, 
+   3.582853794381547*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"GraphPrediction", "[", 
+    RowBox[{
+    "adjMatrix_", ",", "popularities_", ",", "DistThreshold_", ",", 
+     "PopThreshold_"}], "]"}], ":=", 
+   RowBox[{"Map", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"LinkPrediction", "[", 
+       RowBox[{
+        RowBox[{"adjMatrix", "[", 
+         RowBox[{"[", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "]"}], ",", "\n", 
+        RowBox[{"popularities", "[", 
+         RowBox[{"[", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "]"}], "]"}], ",", 
+        RowBox[{"popularities", "[", 
+         RowBox[{"[", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "]"}], "]"}], ",", "DistThreshold",
+         ",", "PopThreshold"}], "]"}], "&"}], ",", " ", "\n", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"i", ",", "j"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "1", ",", 
+         RowBox[{"Length", "[", 
+          RowBox[{"adjMatrix", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"j", ",", "1", ",", 
+         RowBox[{"Length", "[", 
+          RowBox[{"adjMatrix", "[", 
+           RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}]}], "]"}], ",", 
+     RowBox[{"{", "2", "}"}]}], "]"}]}], ";"}]], "Code",
+ CellChangeTimes->{{3.582853470605575*^9, 3.582853639138872*^9}, {
+  3.582853809202291*^9, 3.5828538419683943`*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1016, 703},
+WindowMargins->{{59, Automatic}, {Automatic, 0}},
+FrontEndVersion->"9.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (January 25, \
+2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 193, 4, 148, "Title"],
+Cell[CellGroupData[{
+Cell[797, 30, 98, 1, 80, "Section"],
+Cell[CellGroupData[{
+Cell[920, 35, 325, 6, 69, "Subsection"],
+Cell[CellGroupData[{
+Cell[1270, 45, 136, 2, 35, "Subsubsection"],
+Cell[1409, 49, 231, 5, 28, "Input"],
+Cell[1643, 56, 80, 1, 28, "Input"],
+Cell[1726, 59, 1951, 45, 208, "Code"],
+Cell[3680, 106, 785, 17, 82, "Code"],
+Cell[4468, 125, 586, 16, 66, "Code"],
+Cell[5057, 143, 529, 13, 50, "Code"],
+Cell[5589, 158, 538, 14, 50, "Code"],
+Cell[6130, 174, 2677, 66, 146, "Code"],
+Cell[8810, 242, 1055, 25, 144, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9902, 272, 108, 1, 35, "Subsubsection"],
+Cell[10013, 275, 331, 8, 50, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10381, 288, 304, 5, 35, "Subsubsection"],
+Cell[10688, 295, 3706, 101, 257, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14443, 402, 139, 2, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[14607, 408, 263, 5, 35, "Subsubsection"],
+Cell[14873, 415, 1479, 35, 146, "Code"],
+Cell[16355, 452, 884, 23, 114, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17276, 480, 211, 4, 35, "Subsubsection"],
+Cell[17490, 486, 712, 17, 66, "Code"],
+Cell[18205, 505, 1375, 33, 114, "Code"],
+Cell[19583, 540, 1506, 38, 146, "Code"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21150, 585, 109, 1, 80, "Section"],
+Cell[CellGroupData[{
+Cell[21284, 590, 192, 4, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[21501, 598, 165, 4, 35, "Subsubsection"],
+Cell[21669, 604, 347, 6, 49, "Text"],
+Cell[22019, 612, 1959, 48, 162, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24015, 665, 119, 1, 35, "Subsubsection"],
+Cell[24137, 668, 164, 3, 30, "Text"],
+Cell[24304, 673, 600, 12, 50, "Code"],
+Cell[24907, 687, 583, 16, 50, "Code"],
+Cell[25493, 705, 211, 4, 30, "Text"],
+Cell[25707, 711, 391, 10, 50, "Code"],
+Cell[26101, 723, 177, 4, 30, "Text"],
+Cell[26281, 729, 564, 16, 50, "Code"],
+Cell[26848, 747, 149, 3, 30, "Text"],
+Cell[27000, 752, 378, 9, 50, "Code"],
+Cell[27381, 763, 898, 20, 129, "Code"],
+Cell[28282, 785, 142, 3, 30, "Text"],
+Cell[28427, 790, 757, 21, 82, "Code"],
+Cell[29187, 813, 301, 7, 28, "Input"],
+Cell[CellGroupData[{
+Cell[29513, 824, 186, 4, 28, "Input"],
+Cell[29702, 830, 99, 1, 28, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29862, 838, 130, 3, 44, "Subsection"],
+Cell[29995, 843, 1176, 31, 114, "Code"],
+Cell[31174, 876, 241, 5, 68, "Text"],
+Cell[31418, 883, 369, 11, 50, "Code"],
+Cell[CellGroupData[{
+Cell[31812, 898, 110, 1, 35, "Subsubsection"],
+Cell[31925, 901, 135, 3, 30, "Text"],
+Cell[32063, 906, 294, 10, 50, "Code"],
+Cell[32360, 918, 216, 4, 30, "Text"],
+Cell[32579, 924, 414, 12, 50, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[33042, 942, 101, 1, 44, "Subsection"],
+Cell[33146, 945, 1250, 28, 82, "Code"],
+Cell[34399, 975, 1618, 44, 82, "Code"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
