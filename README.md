@@ -11,6 +11,8 @@ These are exercises and assignments that I did before and during the WSSS.
 TURING MACHINE Homework:
 homeworkTM_5_3.nb -> This notebook describe the Turing Machine with 5 States and 3 Colors (more details here: http://reference.wolfram.com/language/ref/TuringMachine.html). There are 30^15 possible different rules of evolution, from an initial state. The goal of the homework was to find some interesting TMs. I created two criteria, one based on the average width of the TM during its evolution (that helps to exclude the trivial TMs), and the other one based on the entropy, that means the larger the entropy the better. I also observed how widths are distributed in a random sample of 10^4 TMs. And I selected my favorite TM.
 
+homeworkTM_5_3.pdf -> The pdf version of the previous notebook for a visualization without opening Mathematica.
+
 RANDOM WALK 2D and 1D Exercise:
 randomwalk_problem17.nb -> This notebook creates and plots a random walk in one and two dimensions, according to different rules and lattice forms.
 
@@ -23,10 +25,12 @@ DESCRIPTION: posterValentina.pdf -> It describes briefly the project in every as
 
 WIKIPEDIA NETWORK: createNetwork.nb -> It builds the Wikipedia sub-graph starting from an initial page, considering all the articles within two-cliks distance inside English Wikipedia. It also considers links multiplicity.
 
-PROJECT: projectComplete -> All the functions, code lines, graphics, data manipulations for developing the project, in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
+PROJECT: projectComplete.nb -> All the functions, code lines, graphics, data manipulations for developing the project, in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
+
+AllProjectComplete.pdf -> A pdf version of the previous notebook, for a visualization without Mathematica.
 
 - Thesis:
 Useful code for the initial data gathering for my Master’s Thesis.
 
-built_graph.nb and extract_pop.nb ->  These are two Mathematica notebooks, a further development of the WSSS Project described above.
+built_graph.nb and extract_pop.nb ->  These are two Mathematica notebooks, a further development of the WSSS Project described above. There are also the pdf versions.
 
