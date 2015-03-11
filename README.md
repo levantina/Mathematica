@@ -29,7 +29,7 @@ createNetwork.pdf -> A pdf version of the previous notebook, for a visualization
 
 PROJECT: projectComplete.nb -> All the functions, code lines, graphics, data manipulations for developing the project, in one Mathematica notebook. Given the graph (obtained in createNetwork.nb), starting with the download of the visits (popularity) time series (for a certain time window) of the wikipedia articles, and ending with the links prediction for that graph.
 
-AllProjectComplete.pdf -> A pdf version of the previous notebook, for a visualization without Mathematica.
+projectComplete.pdf / AllProjectComplete.pdf -> A pdf version of the previous notebook, for a visualization without Mathematica.
 
 - Thesis:
 Useful code for the initial data gathering for my Master’s Thesis.
