@@ -31,8 +31,8 @@ PROJECT: projectComplete.nb -> All the functions, code lines, graphics, data man
 
 projectComplete.pdf / AllProjectComplete.pdf -> A pdf version of the previous notebook, for a visualization without Mathematica.
 
-- MASTER'S THESIS:
-Useful code for the initial data gathering for my Master’s Thesis and for the data analysis of the time series related.
+- Thesis:
+Useful code for the initial data gathering for my MASTER'S THESIS and for the data analysis of the time series related.
 
 built_graph.nb and extract_pop.nb ->  These are two Mathematica notebooks, a further development of the WSSS Project described above. There are also the pdf versions.
 
